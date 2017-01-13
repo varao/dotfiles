@@ -6,9 +6,11 @@
 #if command -v tmux>/dev/null; then
 #  [[ ! $TERM =~ screen ]] && [ -z $TMUX ] && exec tmux
 #fi
+
 alias tma='tmux attach -d -t'
 alias git-tmux='tmux new -s $(basename $(pwd))'
-
+alias zathur='zathura-tabbed'
+alias rm='rm -I'
 
 # If not running interactively, don't do anything
 case $- in
@@ -103,6 +105,8 @@ esac
         alias egrep='egrep --color=auto'
     fi
 
+eval `dircolors /home/varao/.dir_colors/dircolors_vin`
+
 # some more ls aliases
 alias ll='ls -alF'
 alias la='ls -A'
@@ -155,6 +159,7 @@ alias evince="ev"
            export TERM=xterm-256color
        fi
        alias vi='vim --servername VIM'
+       alias vi='~/git/vim/src//vim'
        if [ "x$TERM" == "xxterm" ] || [ "x$TERM" == "xxterm-256color" ]
        then
            function tvim(){ tmux -2 new-session "TERM=screen-256color vim --servername VIM $@" ; }
@@ -170,7 +175,30 @@ alias evince="ev"
        fi
    fi
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+#export FZF_COMPLETION_TRIGGER='~~'
 
 # create a global per-pane variable that holds the pane's PWD
 # Vinayak: I hacked this up a bit
 export PS1=$PS1'$( [  $TMUX ] && eval tmxJNK=$MYPS && tmux setenv -g TMUX_PWD_$(tmux display -p "#D" | tr -d %) "$tmxJNK" && unset tmxJNK)'
+
+pdfcat () {
+    gs -q -sPAPERSIZE=letter -dNOPAUSE -dBATCH -sDEVICE=pdfwrite \
+        -sOutputFile=concatenated.pdf "$@"
+  }
+PATH=$PATH:$HOME/bin
+MANPATH=$MANPATH:$HOME/share/man
+
+# added by Miniconda2 4.0.5 installer
+export PATH="/home/varao/Python/miniconda2/bin:$PATH"
+
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+export POWERLINE_CONFIG_COMMAND=powerline-config
+
+#if [ -f `which powerline-daemon` ]; then
+#    powerline-daemon -q
+#    POWERLINE_BASH_CONTINUATION=1
+#    POWERLINE_BASH_SELECT=1
+#    .  /home/varao/Python/miniconda2/lib/python2.7/site-packages/powerline/bindings/bash/powerline.sh
+#fi
