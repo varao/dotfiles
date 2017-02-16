@@ -6,11 +6,15 @@
 #if command -v tmux>/dev/null; then
 #  [[ ! $TERM =~ screen ]] && [ -z $TMUX ] && exec tmux
 #fi
+[ -z "$TMUX"  ] && { tmux new-session;}  # This was: [ -z "$TMUX"  ] && { tmux attach || tmux new-session;}
 
 alias tma='tmux attach -d -t'
 alias git-tmux='tmux new -s $(basename $(pwd))'
 alias zathur='zathura-tabbed'
 alias rm='rm -I'
+
+#so as not to be disturbed by Ctrl-S ctrl-Q in terminals:
+stty -ixon
 
 # If not running interactively, don't do anything
 case $- in
@@ -159,7 +163,7 @@ alias evince="ev"
            export TERM=xterm-256color
        fi
        alias vi='vim --servername VIM'
-       alias vi='~/git/vim/src//vim'
+       alias vi='~/git/vim/src//vim --servername VIM'
        if [ "x$TERM" == "xxterm" ] || [ "x$TERM" == "xxterm-256color" ]
        then
            function tvim(){ tmux -2 new-session "TERM=screen-256color vim --servername VIM $@" ; }

@@ -3,7 +3,7 @@ filetype off
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
-Bundle 'vim-latex'
+Bundle 'vimtex'
 "Bundle 'ctrlp.vim'
 Bundle 'flazz/vim-colorschemes'
 Bundle 'Nvim-R'
@@ -12,11 +12,13 @@ Bundle 'godlygeek/tabular'
 "       Bundle 'vim-scripts/Screen-vim---gnu-screentmux'
 "       Bundle 'Lokaltog/vim-easymotion'
 "       Bundle 'kien/ctrlp.vim'
-"       Bundle 'sjl/gundo.vim'
+Bundle 'Gundo'
 "       Bundle 'vim-syntastic/syntastic'
 
 Bundle 'scrooloose/nerdtree'
 Bundle 'tpope/vim-dispatch'
+Bundle 'frawor'
+Bundle 'aurum'
 let g:dispatch_quickfix_height=3
 
 "       Bundle 'yegappan/mru'
@@ -35,12 +37,34 @@ let g:slime_target = "tmux"
 Bundle 'Valloric/YouCompleteMe'
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
+" Don't suggest completions shorter than 5 characters
+let g:ycm_min_num_identifier_candidate_chars = 5
 
 Bundle 'tmux-complete.vim'  
 " Call this with <C-x><C-u>
 " I commented out lines in Youcompleteme/autoload/youcompleteme.vim
 " so that the line below isn't overwritten
 execute "set completefunc=tmuxcomplete#complete"
+" Actually I uncommented it, and added this shortcut
+" nnoremap <leader><Tab> :set completefunc=tmuxcomplete#complete<CR>
+"
+Bundle 'ultisnips'
+Bundle 'vim-snippets'
+"let g:UltiSnipsExpandTrigger="<c-s>"
+let g:UltiSnipsListSnippets="<c-s>"
+
+let g:UltiSnipsExpandTrigger = "<nop>"
+let g:ulti_expand_or_jump_res = 0
+function ExpandSnippetOrCarriageReturn()
+  let snippet = UltiSnips#ExpandSnippetOrJump()
+  if g:ulti_expand_or_jump_res > 0
+    return snippet
+  else
+    return "\<CR>"
+  endif
+endfunction
+inoremap <expr> <CR> pumvisible() ? "<C-R>=ExpandSnippetOrCarriageReturn()<CR>" : "\<CR>"
+
 
 set  hlsearch
 set  expandtab
@@ -61,6 +85,11 @@ syntax enable
 
 let mapleader=","
 let maplocalleader=","
+
+
+" Actually I uncommented it, and added this shortcut
+" See comment earlier, I need this after I define mapleader
+nnoremap <leader><Tab> :set completefunc=tmuxcomplete#complete<CR>
 
 " Navigate tabs firefox style
 nnoremap <C-W><C-T> :tabprevious<CR>
@@ -143,13 +172,13 @@ set timeout ttimeoutlen=50
 
 """""""""""""""""""""""""""""""""""""""""""""""""
 " CtrlP
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_prompt_mappings = {
-    \ 'AcceptSelection("h")': ['<cr>', '<2-LeftMouse>'],
-    \ 'AcceptSelection("e")': ['<c-x>'],
-    \ 'AcceptSelection("t")': ['<c-t>'],
-    \ 'AcceptSelection("v")': ['<NL>', '<RightMouse>'],
-    \ }
+"let g:ctrlp_map = '<c-p>'
+"let g:ctrlp_prompt_mappings = {
+"    \ 'AcceptSelection("h")': ['<cr>', '<2-LeftMouse>'],
+"    \ 'AcceptSelection("e")': ['<c-x>'],
+"    \ 'AcceptSelection("t")': ['<c-t>'],
+"    \ 'AcceptSelection("v")': ['<NL>', '<RightMouse>'],
+"    \ }
 """""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""""""""
@@ -164,7 +193,7 @@ let g:syntastic_r_checkers=['lint']
 """""""""""""""""""""""""""""""""""""""""""""""""
 
 "au BufRead,BufNewFile *.tex setlocal makeprg=pdflatex\ %
-au BufRead,BufNewFile *.tex setlocal makeprg=xelatex\ -shell-escape\ %
+"au BufRead,BufNewFile *.tex setlocal makeprg=xelatex\ -shell-escape\ %
 "% filename %:r filename modifier that discards extension
 au BufRead,BufNewFile *.cc  set makeprg=g++\ -Wall\ -I/usr/local/include\ -lgsl\ -lgslcblas\ -lm\ %\ -o\ %:r
 
@@ -234,7 +263,6 @@ set undolevels=100
 " let vimrplugin_assign = 0
 " let g:vimrplugin_insert_mode_cmds = 0
 
-highlight Pmenu ctermbg=238 gui=bold
 """""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""""""""
@@ -295,8 +323,8 @@ hi Error ctermfg=Red  ctermbg=Black gui=bold,underline
 hi ErrorMsg ctermfg=1  ctermbg=8 gui=bold,underline
 hi SpellBad ctermfg=Black  ctermbg=Red gui=bold,underline
 
-" Disable foldig by vimlatex
-autocmd Filetype tex setlocal nofoldenable
+" Disable folding by vimlatex
+" autocmd Filetype tex setlocal nofoldenable
 
 " Run Space
 " Helps to select the text
@@ -308,7 +336,23 @@ let g:slime_default_config = {"socket_name": "default", "target_pane": "1"}
 " Vinayak: Hacked up a little arrow for the vim rulerformat
 hi VinArrow1 ctermfg=236
 hi VinArrow2 ctermfg=31 ctermbg=236
-set  rulerformat=%35(%=%#VinArrow1#\%#VinArrow2#\ %t:%l,%c\ %2P%)
+
+function GitStat()
+    let gitstat = system("git status --porcelain " . shellescape(expand("%")))[0:1]
+    if gitstat ==? "fa"  
+      return " "
+    elseif gitstat ==? "??"
+      return "?"
+    elseif gitstat ==? ""
+      return "✓"
+    else
+      return substitute(gitstat, " ", "","")
+    endif
+endfunction
+
+let b:gitstat = GitStat()
+set  rulerformat=%35(%=%#VinArrow1#\%#VinArrow2#\ %t\ %l,%c\ %2P\ %{b:gitstat}%)
+autocmd BufReadPost,FileReadPost,Winenter,BufWritePost,FileWritePost * let b:gitstat = GitStat()
 
 set rtp+=~/.fzf
 
@@ -332,3 +376,25 @@ let g:fzf_layout = { 'down': '~40%' }
 "                             your $FZF_DEFAULT_OPTS.
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 nnoremap <c-p> :FZF<cr>
+
+hi StatusLine  ctermfg=31 ctermbg=232 cterm=NONE
+hi StatusLineNC  ctermfg=4 ctermbg=236 cterm=NONE
+
+let g:latex_view_general_viewer = 'zathura'
+let g:vimtex_view_method = "zathura"
+hi MatchParen ctermbg=239
+let g:vimtex_quickfix_open_on_warning=0
+
+" Do we want quickfix on warnings?
+nnoremap <localleader>lw :let g:vimtex_quickfix_open_on_warning = !g:vimtex_quickfix_open_on_warning<CR>
+
+" Navigate quickfix
+map <C-j> :cn<CR>
+map <C-k> :cp<CR>
+au FileType qf call AdjustWindowHeight(3, 10)
+function! AdjustWindowHeight(minheight, maxheight)
+  exe max([min([line("$"), a:maxheight]), a:minheight]) . "wincmd _"
+endfunction
+
+highlight Pmenu ctermbg=238 ctermfg=202 gui=bold
+highlight PmenuSel  ctermbg=240 ctermfg=202 gui=bold
