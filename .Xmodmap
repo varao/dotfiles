@@ -1,0 +1,6 @@
+!! Remap <Caps>-hjkl to arrows
+keycode 66 = Mode_switch
+keysym j = j J Down 
+keysym l = l L Right
+keysym k = k K Up
+keysym h = h H Up
