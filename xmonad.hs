@@ -20,6 +20,7 @@ import XMonad.Layout.ResizableTile
 -- Boring windows doesn't update some subtabs
 -- when I change workspaces
 import XMonad.Layout.BoringWindows
+import XMonad.Layout.Grid
 
 myTheme = def {  
             activeColor = "#0066aa",
@@ -37,7 +38,7 @@ myLayout = avoidStruts  -- Makes gnome panel visible
               where 
                 rt = ResizableTall 1 (3/100) (1/2) []
                 tall =  subLayout [] 
-                  (Simplest ||| spiral (6/7)) 
+                  (Simplest ||| spiral (6/7) ||| Grid) 
                   $ spiral (6/7) ||| rt 
                    -- ||| Mirror(rt) 
                    ||| Full
