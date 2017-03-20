@@ -1,7 +1,11 @@
+{-# LANGUAGE PackageImports, OverloadedStrings #-}
+
 import XMonad
-import XMonad.Actions.UpdatePointer
 import XMonad.Config.Gnome
+import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.DynamicLog
+import XMonad.Actions.UpdatePointer
 import XMonad.Layout.Fullscreen
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Spiral
@@ -22,6 +26,10 @@ import XMonad.Layout.ResizableTile
 import XMonad.Layout.BoringWindows
 import XMonad.Layout.Grid
 
+import qualified "dbus" DBus as D
+import qualified "dbus" DBus.Client as D
+import qualified Codec.Binary.UTF8.String as UTF8
+
 myTheme = def {  
             activeColor = "#0066aa",
             inactiveColor = "#444444",
@@ -39,8 +47,8 @@ myLayout = avoidStruts  -- Makes gnome panel visible
                 rt = ResizableTall 1 (3/100) (1/2) []
                 tall =  subLayout [] 
                   (Simplest ||| spiral (6/7) ||| Grid) 
-                  $ spiral (6/7) ||| rt 
-                   -- ||| Mirror(rt) 
+                  $  rt ||| Mirror(rt)
+                   -- |||spiral (6/7) ||| Mirror(rt) 
                    ||| Full
 
 -- width of border around windows
@@ -57,35 +65,34 @@ myStartupHook     = do
  -- setWMName "HM"
 
 myModMask = mod1Mask
-modm      = myModMask
 
 myKeys = 
   [ --((myModMask, xK_p), spawn myLauncher)
-    ((modm .|. controlMask, xK_Left), sendMessage $ pullGroup L)
+    ((myModMask .|. controlMask, xK_Left), sendMessage $ pullGroup L)
     --Group to Right
-    , ((modm .|. controlMask, xK_Right), sendMessage $ pullGroup R)
+    , ((myModMask .|. controlMask, xK_Right), sendMessage $ pullGroup R)
     --Group Above
-    , ((modm .|. controlMask, xK_Up), sendMessage $ pullGroup U)
+    , ((myModMask .|. controlMask, xK_Up), sendMessage $ pullGroup U)
     --Group Below
-    , ((modm .|. controlMask, xK_Down), sendMessage $ pullGroup D)
+    , ((myModMask .|. controlMask, xK_Down), sendMessage $ pullGroup D)
    -- resize windows
-    , ((modm,               xK_a), sendMessage MirrorShrink)
-    , ((modm,               xK_z), sendMessage MirrorExpand)
+    , ((myModMask,               xK_a), sendMessage MirrorShrink)
+    , ((myModMask,               xK_z), sendMessage MirrorExpand)
     --Merge/UnMerge
-    , ((modm .|. controlMask, xK_m), withFocused (sendMessage . MergeAll))
-    , ((modm .|. controlMask, xK_u), withFocused (sendMessage . UnMerge))
-    , ((modm .|. controlMask, xK_v), withFocused (sendMessage . UnMergeAll))
+    , ((myModMask .|. controlMask, xK_m), withFocused (sendMessage . MergeAll))
+    , ((myModMask .|. controlMask, xK_u), withFocused (sendMessage . UnMerge))
+    , ((myModMask .|. controlMask, xK_v), withFocused (sendMessage . UnMergeAll))
     --Focus between tabs
     --also swapped j and k to be more vim-like
-    , ((modm .|. controlMask, xK_k), onGroup W.focusUp')
-    , ((modm .|. controlMask, xK_j), onGroup W.focusDown')
-    , ((modm .|. controlMask, xK_space),  toSubl NextLayout)
+    , ((myModMask .|. controlMask, xK_k), onGroup W.focusUp')
+    , ((myModMask .|. controlMask, xK_j), onGroup W.focusDown')
+    , ((myModMask .|. controlMask, xK_space),  toSubl NextLayout)
     --BoringWindows: groups clustered windows
-    , ((modm, xK_k), focusUp)
-    , ((modm, xK_j), focusDown)
-    , ((modm, xK_m), focusMaster)
+    , ((myModMask, xK_k), focusUp)
+    , ((myModMask, xK_j), focusDown)
+    , ((myModMask, xK_m), focusMaster)
    --Launcher
-    , ((modm, xK_p), spawn myLauncher)
+    , ((myModMask, xK_p), spawn myLauncher)
   ]
 
 myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
@@ -105,18 +112,61 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
     -- you may also bind events to the mouse scroll wheel (button4 and button5)
   ]
 
-myLogHook = 
-      updatePointer (0.25, 0.25) (0.25, 0.25) -- near the top-left
-
 myLauncher = "$(/home/varao/.cabal/bin/yeganesh -x -- -fn '-*-terminus-*-r-normal-*-*-120-*-*-*-*-iso8859-*')"
 
+
+main :: IO ()
 main = do
-     xmonad $ gnomeConfig 
-      { layoutHook         = smartBorders $ myLayout
-      , borderWidth        = myBorderWidth
-      , focusedBorderColor = myFocusedBorderColor
-      , normalBorderColor  = myNormalBorderColor
-      , logHook            = myLogHook
-      , startupHook        = myStartupHook
-      , mouseBindings      = myMouseBindings
-      }  `additionalKeys` myKeys
+    dbus <- D.connectSession
+    getWellKnownName dbus
+    xmonad $ gnomeConfig
+         { 
+           logHook = dynamicLogWithPP (prettyPrinter dbus)
+                      >> updatePointer (0.25, 0.25) (0.25, 0.25) -- near the top-left
+           , layoutHook         = smartBorders $ myLayout
+           , borderWidth        = myBorderWidth
+           , focusedBorderColor = myFocusedBorderColor
+           , normalBorderColor  = myNormalBorderColor
+           , startupHook        = myStartupHook
+           , mouseBindings      = myMouseBindings
+         } `additionalKeys` myKeys
+
+prettyPrinter :: D.Client -> PP
+prettyPrinter dbus = defaultPP
+    { ppOutput   = dbusOutput dbus
+    , ppTitle    = pangoColor "skyblue" . pangoSanitize  . shorten 75
+    , ppCurrent  = pangoColor "#0099bb" . wrap "[" "]" . pangoSanitize
+    , ppVisible  = pangoColor "yellow" . wrap "(" ")" . pangoSanitize
+    , ppHidden   = const ""
+    , ppUrgent   = pangoColor "red"
+    , ppLayout   = const ""
+    , ppSep      = " "
+    }
+
+getWellKnownName :: D.Client -> IO ()
+getWellKnownName dbus = do
+  D.requestName dbus (D.busName_ "org.xmonad.Log")
+                [D.nameAllowReplacement, D.nameReplaceExisting, D.nameDoNotQueue]
+  return ()
+  
+dbusOutput :: D.Client -> String -> IO ()
+dbusOutput dbus str = do
+    let signal = (D.signal "/org/xmonad/Log" "org.xmonad.Log" "Update") {
+            D.signalBody = [D.toVariant ("<b>" ++ (UTF8.decodeString str) ++ "</b>")]
+        }
+    D.emit dbus signal
+
+pangoColor :: String -> String -> String
+pangoColor fg = wrap left right
+  where
+    left  = "<span foreground=\"" ++ fg ++ "\">"
+    right = "</span>"
+
+pangoSanitize :: String -> String
+pangoSanitize = foldr sanitize ""
+  where
+    sanitize '>'  xs = "&gt;" ++ xs
+    sanitize '<'  xs = "&lt;" ++ xs
+    sanitize '\"' xs = "&quot;" ++ xs
+    sanitize '&'  xs = "&amp;" ++ xs
+    sanitize x    xs = x:xs

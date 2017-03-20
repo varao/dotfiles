@@ -1,3 +1,4 @@
+keycode 118 = Control_R
 !! Remap <Caps>-hjkl to arrows
 keycode 66 = Mode_switch
 keysym j = j J Down 

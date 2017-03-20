@@ -163,6 +163,8 @@ alias evince="ev"
            export TERM=xterm-256color
        fi
        alias vi='vim --servername VIM'
+       # Add a -X option below to avoid delay opening a file because
+       # vim tries to connect to X
        alias vi='~/git/vim/src//vim --servername VIM'
        if [ "x$TERM" == "xxterm" ] || [ "x$TERM" == "xxterm-256color" ]
        then
@@ -206,3 +208,9 @@ export POWERLINE_CONFIG_COMMAND=powerline-config
 #    POWERLINE_BASH_SELECT=1
 #    .  /home/varao/Python/miniconda2/lib/python2.7/site-packages/powerline/bindings/bash/powerline.sh
 #fi
+export PATH=$PATH:~/.cabal/bin:~/.xmonad/bin
+
+# Moved from .xinitrc to here because it doesn't get executed
+# Probably a cleaner solution
+# xmodmap ~/.Xmodmap
+#xcape -e 'Shift_L=Escape;Hyper_L=Tab'

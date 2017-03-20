@@ -79,6 +79,10 @@ set  relativenumber
 set  number
 set backspace=indent,eol,start
 
+" Vim loads slowly trying to connct to X
+" To highlight, copy or paste, hold shift down
+" set clipboard=exclude:.*  
+
 filetype on
 filetype plugin indent on
 syntax enable
@@ -398,3 +402,8 @@ endfunction
 
 highlight Pmenu ctermbg=238 ctermfg=202 gui=bold
 highlight PmenuSel  ctermbg=240 ctermfg=202 gui=bold
+
+autocmd BufEnter * call system("tmux rename-window " . expand("%:t"). '\ ['. expand(v:servername).']')
+autocmd VimLeave * call system("tmux rename-window bash")
+" autocmd BufEnter * let &titlestring = ' ' . expand("%:t")                                                                 
+" set title
