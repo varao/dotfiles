@@ -63,6 +63,15 @@ myStartupHook     = do
   startupHook gnomeConfig
   spawn "xcompmgr -cfF -t-9 -l-11 -r9 -o.95 -D6 &" -- for transparencies
  -- setWMName "HM"
+ 
+myManageHook = composeAll
+   [ (role =? "gimp-toolbox" <||> role =? "gimp-image-window") --> 
+          doFloat
+   , className =? "Xmessage"  --> doFloat
+   , className =? "R_x11"  --> doFloat
+   , manageDocks
+   ]
+  where role = stringProperty "WM_WINDOW_ROLE"
 
 myModMask = mod1Mask
 
@@ -103,7 +112,7 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 
     -- mod-button2, Raise the window to the top of the stack
     , ((modMask, button2),
-       (\w -> focus w >> windows W.swapMaster))
+       (\w -> focus w >> windows W.shiftMaster))
 
     -- mod-button3, Set the window to floating mode and resize by dragging
     , ((modMask, button3),
@@ -128,6 +137,7 @@ main = do
            , focusedBorderColor = myFocusedBorderColor
            , normalBorderColor  = myNormalBorderColor
            , startupHook        = myStartupHook
+           , manageHook         = myManageHook <+> manageHook defaultConfig -- uses default too
            , mouseBindings      = myMouseBindings
          } `additionalKeys` myKeys
 
@@ -135,9 +145,9 @@ prettyPrinter :: D.Client -> PP
 prettyPrinter dbus = defaultPP
     { ppOutput   = dbusOutput dbus
     , ppTitle    = pangoColor "skyblue" . pangoSanitize  . shorten 75
-    , ppCurrent  = pangoColor "#0099bb" . wrap "[" "]" . pangoSanitize
-    , ppVisible  = pangoColor "yellow" . wrap "(" ")" . pangoSanitize
-    , ppHidden   = const ""
+    , ppCurrent  = pangoColor "#00aacc" . wrap "[" "*]" . pangoSanitize
+    , ppVisible  = pangoColor "#00aacc" . wrap "[" "]" . pangoSanitize
+    , ppHidden   = pangoColor "grey70" . wrap "[" "]" . pangoSanitize
     , ppUrgent   = pangoColor "red"
     , ppLayout   = const ""
     , ppSep      = " "
