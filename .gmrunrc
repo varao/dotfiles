@@ -1,5 +1,12 @@
-URL_g = firefox -private-window 'http://www.google.com/search?q=%s'
 AlwaysInTerm = ssh telnet ftp lynx mc vi vim pine centericq perldoc man htop 
 ShowDotFiles = 1
 EXT:pdf = evince %s
+
+#Call fuzzy search on empty command
 Terminal = /home/varao/git/dotfiles/search.sh
+
+#Otherwise run gnome-terminal
+TermExec = gnome-terminal -e
+
+# g: stuff googles stuff
+URL_g = firefox -private-window 'http://www.google.com/search?q=%s'
