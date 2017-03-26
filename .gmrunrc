@@ -1,0 +1,5 @@
+URL_g = firefox -private-window 'http://www.google.com/search?q=%s'
+AlwaysInTerm = ssh telnet ftp lynx mc vi vim pine centericq perldoc man htop 
+ShowDotFiles = 1
+EXT:pdf = evince %s
+Terminal = /home/varao/git/dotfiles/search.sh
