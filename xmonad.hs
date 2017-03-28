@@ -4,7 +4,7 @@ import XMonad
 import XMonad.Config.Gnome
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
-import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.ManageHelpers
 import XMonad.Actions.UpdatePointer
 import XMonad.Layout.Fullscreen
 import XMonad.Layout.NoBorders
@@ -21,8 +21,7 @@ import qualified Data.Map        as M
 import XMonad.Layout.SubLayouts
 import XMonad.Layout.WindowNavigation
 import XMonad.Layout.ResizableTile
--- Boring windows doesn't update some subtabs
--- when I change workspaces
+
 import XMonad.Layout.BoringWindows
 import XMonad.Layout.Grid
 
@@ -69,6 +68,7 @@ myManageHook = composeAll
           doFloat
    , className =? "Xmessage"  --> doFloat
    , className =? "R_x11"  --> doFloat
+   , className =? "XTerm"  --> doCenterFloat
    , manageDocks
    ]
   where role = stringProperty "WM_WINDOW_ROLE"
@@ -97,11 +97,12 @@ myKeys =
     , ((myModMask .|. controlMask, xK_j), onGroup W.focusDown')
     , ((myModMask .|. controlMask, xK_space),  toSubl NextLayout)
     --BoringWindows: groups clustered windows
-    , ((myModMask, xK_k), focusUp)
-    , ((myModMask, xK_j), focusDown)
-    , ((myModMask, xK_m), focusMaster)
+    , ((myModMask                , xK_k), focusUp)
+    , ((myModMask                , xK_j), focusDown)
+    , ((myModMask                , xK_m), focusMaster)
    --Launcher
-    , ((myModMask, xK_p), spawn myLauncher)
+    , ((myModMask                , xK_p), spawn myLauncher)
+    , ((myModMask                , xK_f), spawn myFzf)
   ]
 
 myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
@@ -122,6 +123,7 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
   ]
 
 myLauncher = "$(/home/varao/.cabal/bin/yeganesh -x -- -fn '-*-terminus-*-r-normal-*-*-120-*-*-*-*-iso8859-*')"
+myFzf = "$(/home/varao/git/dotfiles/search.sh)"
 
 
 main :: IO ()
@@ -144,12 +146,12 @@ main = do
 prettyPrinter :: D.Client -> PP
 prettyPrinter dbus = defaultPP
     { ppOutput   = dbusOutput dbus
-    , ppTitle    = pangoColor "skyblue" . pangoSanitize  . shorten 75
+    , ppLayout   = pangoColor "orange" . myLayoutPrinter
+    , ppTitle    = pangoColor "skyblue" . pangoSanitize  . shorten 100
     , ppCurrent  = pangoColor "#00aacc" . wrap "[" "*]" . pangoSanitize
     , ppVisible  = pangoColor "#00aacc" . wrap "[" "]" . pangoSanitize
     , ppHidden   = pangoColor "grey70" . wrap "[" "]" . pangoSanitize
     , ppUrgent   = pangoColor "red"
-    , ppLayout   = const ""
     , ppSep      = " "
     }
 
@@ -180,3 +182,9 @@ pangoSanitize = foldr sanitize ""
     sanitize '\"' xs = "&quot;" ++ xs
     sanitize '&'  xs = "&amp;" ++ xs
     sanitize x    xs = x:xs
+
+myLayoutPrinter :: String -> String
+myLayoutPrinter "Tabbed Full" = "F"
+myLayoutPrinter "Tabbed ResizableTall" = "|"
+myLayoutPrinter "Tabbed Mirror ResizableTall" = "-"
+myLayoutPrinter x = x
