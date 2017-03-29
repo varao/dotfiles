@@ -16,6 +16,8 @@ import XMonad.Layout.Simplest
 import XMonad.Layout.Named
 import XMonad.Util.EZConfig ( additionalKeys )
 import XMonad.Util.Font
+import XMonad.Util.Scratchpad
+import XMonad.Util.NamedScratchpad
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 import XMonad.Layout.SubLayouts
@@ -102,8 +104,18 @@ myKeys =
     , ((myModMask                , xK_m), focusMaster)
    --Launcher
     , ((myModMask                , xK_p), spawn myLauncher)
-    , ((myModMask                , xK_f), spawn myFzf)
+--    , ((myModMask                , xK_f), spawn myFzf)
+    , ((myModMask                , xK_f), scratchFzf)
   ]
+  where
+    -- this simply means "find the scratchpad in myScratchPads that is 
+    -- named fuzzyfind and launch it"
+    scratchFzf  = namedScratchpadAction myScratchPads "fuzzyfind"
+
+myScratchPads = [ NS "fuzzyfind"  myFzf findTerm defaultFloating -- one scratchpad
+                ]
+  where
+   findTerm   = resource  =? "fzf_term"  
 
 myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
   [
@@ -123,7 +135,7 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
   ]
 
 myLauncher = "$(/home/varao/.cabal/bin/yeganesh -x -- -fn '-*-terminus-*-r-normal-*-*-120-*-*-*-*-iso8859-*')"
-myFzf = "$(/home/varao/git/dotfiles/search.sh)"
+myFzf = "$(/home/varao/git/dotfiles/search.sh )"
 
 
 main :: IO ()
@@ -139,12 +151,14 @@ main = do
            , focusedBorderColor = myFocusedBorderColor
            , normalBorderColor  = myNormalBorderColor
            , startupHook        = myStartupHook
-           , manageHook         = myManageHook <+> manageHook defaultConfig -- uses default too
+           , manageHook         = myManageHook 
+                                    <+> namedScratchpadManageHook myScratchPads 
+                                    <+> manageHook defaultConfig -- uses default too
            , mouseBindings      = myMouseBindings
          } `additionalKeys` myKeys
 
 prettyPrinter :: D.Client -> PP
-prettyPrinter dbus = defaultPP
+prettyPrinter dbus =  namedScratchpadFilterOutWorkspacePP $ defaultPP
     { ppOutput   = dbusOutput dbus
     , ppLayout   = pangoColor "orange" . myLayoutPrinter
     , ppTitle    = pangoColor "skyblue" . pangoSanitize  . shorten 100

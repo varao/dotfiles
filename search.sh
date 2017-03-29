@@ -1,5 +1,4 @@
-
-xterm -e '
+xterm -name fzf_term -e '
 
 function run_sel() {
   f_fzf=$1
@@ -23,10 +22,13 @@ stdir_o=$(dirname $stdir)  # get parent dir
 f_fzf="tmp"
 
 while [ ! -z "${f_fzf// }" ]; do
-  f_fzf="$({ echo $stdir_o; /home/varao/git/bfs/bfs $stdir -exclude -name .git 2> /dev/null | tail -n +2 ; } | /home/varao/.fzf/bin/fzf +s --bind "tab:accept,enter:execute(run_sel {} &)")"
+  echo $f_fzf
+  f_fzf="$({ echo $stdir_o; /home/varao/git/bfs/bfs "$stdir" -exclude -name .git 2> /dev/null | tail -n +2 ; } | /home/varao/.fzf/bin/fzf +s --bind "tab:accept,enter:execute(run_sel {} &)")"
   stdir=$f_fzf
-  stdir_o=$(dirname $stdir)
+  # Need quotes inside $() (and above) for whitespaces in filenames 
+  stdir_o=$(dirname "$stdir") 
 done
 # installed bfs from https://github.com/tavianator/bfs, branch exclude
 
 '
+
