@@ -70,7 +70,6 @@ myManageHook = composeAll
           doFloat
    , className =? "Xmessage"  --> doFloat
    , className =? "R_x11"  --> doFloat
-   , className =? "XTerm"  --> doCenterFloat
    , manageDocks
    ]
   where role = stringProperty "WM_WINDOW_ROLE"
@@ -106,16 +105,20 @@ myKeys =
     , ((myModMask                , xK_p), spawn myLauncher)
 --    , ((myModMask                , xK_f), spawn myFzf)
     , ((myModMask                , xK_f), scratchFzf)
+    , ((myModMask                , xK_z), scratchZthr)
   ]
   where
     -- this simply means "find the scratchpad in myScratchPads that is 
     -- named fuzzyfind and launch it"
-    scratchFzf  = namedScratchpadAction myScratchPads "fuzzyfind"
+    scratchFzf   = namedScratchpadAction myScratchPads "fuzzyfind"
+    scratchZthr  = namedScratchpadAction myScratchPads "zathur"
 
-myScratchPads = [ NS "fuzzyfind"  myFzf findTerm defaultFloating -- one scratchpad
+myScratchPads = [  NS "fuzzyfind"  myFzf  findFZ  (customFloating $ W.RationalRect (1/8) (1/6) (1/3) (2/3))  -- one scratchpad
+                 , NS "zathur"    "zathura-tabbed" findZth nonFloating  -- one scratchpad
                 ]
   where
-   findTerm   = resource  =? "fzf_term"  
+   findFZ   = resource  =? "fzf_term"  
+   findZth  = className =? "tabbed"  
 
 myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
   [
