@@ -1,0 +1,16 @@
+XTerm*vt100*translations:   #override                       \n \
+    Shift Ctrl <KeyPress>C: copy-selection(CLIPBOARD)       \n \
+    Shift Ctrl <KeyPress>V: insert-selection(CLIPBOARD)     \n \
+    Shift Ctrl <Key>N:      spawn-new-terminal()            \n
+
+XTerm*foreground: rgb:00/88/88
+XTerm*background: Gray
+
+XTerm*faceName: Inconsolata:size=17:antialias=false
+xterm*faceSize: 17
+
+XTerm.VT100.color4:             CornflowerBlue
+XTerm.VT100.color10:            Green3
+XTerm.VT100*color3:            Dark Orange
+
+! After update, do xrdb -merge ~/.Xresources
