@@ -10,7 +10,7 @@ Bundle 'Nvim-R'
 Bundle 'godlygeek/tabular'
 "       Bundle 'vim-scripts/Vim-R-plugin'
 "       Bundle 'vim-scripts/Screen-vim---gnu-screentmux'
-"       Bundle 'Lokaltog/vim-easymotion'
+Bundle 'joequery/Stupid-EasyMotion'
 "       Bundle 'kien/ctrlp.vim'
 Bundle 'Gundo'
 "       Bundle 'vim-syntastic/syntastic'
@@ -78,6 +78,7 @@ set  mouse=a
 set  relativenumber
 set  number
 set backspace=indent,eol,start
+nmap <CR> i<CR><Esc>
 
 " Vim loads slowly trying to connct to X
 " To highlight, copy or paste, hold shift down
@@ -326,6 +327,7 @@ hi Visual ctermbg=Black
 hi Error ctermfg=Red  ctermbg=Black gui=bold,underline
 hi ErrorMsg ctermfg=1  ctermbg=8 gui=bold,underline
 hi SpellBad ctermfg=Black  ctermbg=Red gui=bold,underline
+hi Folded ctermbg=DarkGrey
 
 " Disable folding by vimlatex
 " autocmd Filetype tex setlocal nofoldenable
