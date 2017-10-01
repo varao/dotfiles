@@ -11,7 +11,7 @@ function run_sel() {
   elif [ ${f_fzf: -4} == ".pdf" ]; then
     spwn_cmd="nohup zathura-tabbed $f_fzf &> /dev/null &"
   else 
-    spwn_cmd="gnome-terminal -e \"/home/outlier/u43/varao/git/vim/src/vim $f_fzf\"" 
+    spwn_cmd="gnome-terminal -e \"$HOME/git/vim/src/vim $f_fzf\"" 
   fi
   eval $spwn_cmd
 }
@@ -24,7 +24,7 @@ f_fzf="tmp"
 while [ ! -z "${f_fzf// }" ]; do
   echo $f_fzf
   f_fzf="$({ echo $stdir_o; 
-             $HOME/git/bfs/bfs "$stdir" -color -exclude -name .git 2> /dev/null | tail -n +2 ; } | $HOME/git/fzf/bin/fzf +s --ansi --color=fg+:-1,spinner:5,hl:1,hl+:1,info:5,bg+:7 --bind "tab:accept,enter:execute(run_sel {} &)")"
+             $HOME/git/bfs/bfs "$stdir" -color -exclude -name .git 2> /dev/null | tail -n +2 ; } | $HOME/.fzf/bin/fzf +s --ansi --color=fg+:-1,spinner:5,hl:1,hl+:1,info:5,bg+:7 --bind "tab:accept,enter:execute(run_sel {} &)")"
   stdir=$f_fzf
   # Need quotes inside $() (and above) for whitespaces in filenames 
   stdir_o=$(dirname "$stdir") 
