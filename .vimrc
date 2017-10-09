@@ -301,6 +301,13 @@ else
     inoremap <Nul> <C-x><C-o><C-p>
 endif
 
+"By default vim organizes undo into actions (e.g. entering and
+"leaving insert mode). The options below break this up, and add
+"entered text into the undo tree whenever you hit space, tab or return
+inoremap <Space> <Space><C-g>u
+inoremap <Return> <Return><C-g>u
+inoremap <Tab> <Tab><C-g>u
+
 " Force Vim to use 256 colors if running in a capable terminal emulator:
 if &term =~ "xterm" || &term =~ "256" || $DISPLAY != "" || $HAS_256_COLORS == "yes"
     set t_Co=256
