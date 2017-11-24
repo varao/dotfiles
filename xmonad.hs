@@ -6,6 +6,7 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Actions.UpdatePointer
 import XMonad.Layout.Fullscreen
+import XMonad.Actions.GridSelect
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Spiral
 import XMonad.Layout.Tabbed
@@ -107,6 +108,14 @@ myManageHook = composeAll
    ]
   where role = stringProperty "WM_WINDOW_ROLE"
 
+-- GSConfig options:
+myGSConfig = defaultGSConfig
+    { gs_cellheight = 100
+    , gs_cellwidth = 200
+    , gs_cellpadding = 10
+    , gs_font = "xft:DejaVu Sans:size=10" 
+    }
+
 myModMask = mod1Mask
 
 myKeys = 
@@ -130,6 +139,8 @@ myKeys =
     , ((myModMask .|. controlMask, xK_k), onGroup W.focusUp')
     , ((myModMask .|. controlMask, xK_j), onGroup W.focusDown')
     , ((myModMask .|. controlMask, xK_space),  toSubl NextLayout)
+    --Grid of open windows
+    , ((myModMask, xK_g), goToSelected myGSConfig)
     --BoringWindows: groups clustered windows
     , ((myModMask                , xK_k), focusUp)
     , ((myModMask                , xK_j), focusDown)

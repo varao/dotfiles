@@ -10,7 +10,7 @@
 
 alias tma='tmux attach -d -t'
 alias git-tmux='tmux new -s $(basename $(pwd))'
-alias zathur='zathura-tabbed'
+alias zathur='zathura-tabbed 2> /dev/null'
 alias rm='rm -I'
 
 #so as not to be disturbed by Ctrl-S ctrl-Q in terminals:
@@ -181,7 +181,7 @@ alias evince="ev"
        fi
    fi
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-#export FZF_COMPLETION_TRIGGER='~~'
+export FZF_COMPLETION_TRIGGER="''"
 
 # create a global per-pane variable that holds the pane's PWD
 # Vinayak: I hacked this up a bit
@@ -209,8 +209,3 @@ export POWERLINE_CONFIG_COMMAND=powerline-config
 #    .  /home/varao/Python/miniconda2/lib/python2.7/site-packages/powerline/bindings/bash/powerline.sh
 #fi
 export PATH=$PATH:~/.cabal/bin:~/.xmonad/bin
-
-# Moved from .xinitrc to here because it doesn't get executed
-# Probably a cleaner solution
-# xmodmap ~/.Xmodmap
-#xcape -e 'Shift_L=Escape;Hyper_L=Tab'

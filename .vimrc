@@ -10,7 +10,11 @@ Bundle 'Nvim-R'
 Bundle 'godlygeek/tabular'
 "       Bundle 'vim-scripts/Vim-R-plugin'
 "       Bundle 'vim-scripts/Screen-vim---gnu-screentmux'
-Bundle 'joequery/Stupid-EasyMotion'
+"Bundle 'joequery/Stupid-EasyMotion'
+Bundle 'Lokaltog/vim-easymotion'
+Bundle 'vim-sneak'
+Bundle 'haya14busa/incsearch.vim'
+Bundle 'haya14busa/incsearch-fuzzy.vim'
 "       Bundle 'kien/ctrlp.vim'
 Bundle 'Gundo'
 "       Bundle 'vim-syntastic/syntastic'
@@ -201,6 +205,9 @@ let g:syntastic_r_checkers=['lint']
 "au BufRead,BufNewFile *.tex setlocal makeprg=xelatex\ -shell-escape\ %
 "% filename %:r filename modifier that discards extension
 au BufRead,BufNewFile *.cc  set makeprg=g++\ -Wall\ -I/usr/local/include\ -lgsl\ -lgslcblas\ -lm\ %\ -o\ %:r
+" automatically add newline if length greater than 74
+" au BufRead,BufNewFile *.tex setlocal textwidth=74
+set textwidth=74
 
 nnoremap <leader>m :Make<CR>
 nnoremap <leader>w :w<CR>
@@ -275,7 +282,6 @@ set undolevels=100
 vnoremap <leader>t :Tabular<space>/
 """""""""""""""""""""""""""""""""""""""""""""""""
 
-
 """""""""""""""""""""""""""""""""""""""""""""""""
 """   Ignore
 """""""""""""""""""""""""""""""""""""""""""""""""
@@ -305,7 +311,7 @@ endif
 "leaving insert mode). The options below break this up, and add
 "entered text into the undo tree whenever you hit space, tab or return
 inoremap <Space> <Space><C-g>u
-inoremap <Return> <Return><C-g>u
+"inoremap <Return> <Return><C-g>u  " This messes up vimtex autocomplete
 inoremap <Tab> <Tab><C-g>u
 
 " Force Vim to use 256 colors if running in a capable terminal emulator:
@@ -327,6 +333,9 @@ endif
 "   let g:solarized_visibility = "high"
 "   let g:solarized_contrast = "high"
 "   se t_Co=256
+
+autocmd ColorScheme * hi Sneak guifg=black guibg=red ctermfg=black ctermbg=red
+
 colorscheme pyte
 
 hi Search ctermfg=Black ctermbg=DarkGrey
@@ -389,6 +398,7 @@ let g:fzf_layout = { 'down': '~40%' }
 "                             your $FZF_DEFAULT_OPTS.
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 nnoremap <c-p> :FZF<cr>
+nnoremap <c-a> :FZF ~<cr>
 
 hi StatusLine  ctermfg=31 ctermbg=232 cterm=NONE
 hi StatusLineNC  ctermfg=4 ctermbg=236 cterm=NONE
@@ -416,3 +426,22 @@ autocmd BufEnter * call system("tmux rename-window " . expand("%:t"). '\ ['. exp
 autocmd VimLeave * call system("tmux rename-window bash")
 " autocmd BufEnter * let &titlestring = ' ' . expand("%:t")                                                                 
 " set title
+
+
+map <Leader> <Plug>(easymotion-prefix)
+map <leader><leader>w <Plug>(easymotion-bd-w)
+map <leader><leader>e <Plug>(easymotion-bd-e)
+map <leader><leader>f <Plug>(easymotion-bd-f)
+
+let g:EasyMotion_disable_two_key_combo = 1
+let g:EasyMotion_grouping = 1
+
+map /  <Plug>(incsearch-forward)
+map '/ <Plug>(incsearch-fuzzy-/)
+
+hi EasyMotionTarget2First ctermbg=none ctermfg=red
+hi EasyMotionTarget2Second ctermbg=none ctermfg=lightred
+
+map f <Plug>Sneak_f
+nmap <Tab> <Plug>SneakNext
+nmap <Backspace> <Plug>SneakPrevious
