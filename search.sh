@@ -10,8 +10,10 @@ function run_sel() {
     spwn_cmd="gnome-terminal --working-directory=$f_fzf"
   elif [ ${f_fzf: -4} == ".pdf" ]; then
     spwn_cmd="nohup zathura-tabbed $f_fzf &> /dev/null &"
+  elif [ ${f_fzf: -5} == ".html" ]; then
+    spwn_cmd="nohup firefox --private-window $f_fzf &> /dev/null &"
   else 
-    spwn_cmd="gnome-terminal -e \"$HOME/git/vim/src/vim $f_fzf\"" 
+    spwn_cmd="gnome-terminal -e \"nvim $f_fzf\"" 
   fi
   eval $spwn_cmd
 }

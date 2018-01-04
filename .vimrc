@@ -6,7 +6,11 @@ call vundle#rc()
 Bundle 'vimtex'
 "Bundle 'ctrlp.vim'
 Bundle 'flazz/vim-colorschemes'
-Bundle 'Nvim-R'
+
+Bundle 'roxma/nvim-completion-manager'
+Bundle 'Nvim-R', { 'for' : 'r' }
+"Bundle 'gaalcaras/ncm-R'
+
 Bundle 'godlygeek/tabular'
 "       Bundle 'vim-scripts/Vim-R-plugin'
 "       Bundle 'vim-scripts/Screen-vim---gnu-screentmux'
@@ -25,16 +29,6 @@ Bundle 'frawor'
 Bundle 'aurum'
 let g:dispatch_quickfix_height=3
 
-"       Bundle 'yegappan/mru'
-"       Bundle 'xolox/vim-misc'
-"       Bundle 'xolox/vim-session'
-"       Bundle 'jcf/vim-latex'
-" Bundle 'vim-airline/vim-airline'
-" Bundle 'vim-airline/vim-airline-themes'
-" " Needed for airline
-" set laststatus=2
-" let g:airline_theme='distinguished'
-" let g:airline#extensions#whitespace#enabled = 0
 Bundle 'sjpalardy/vim-slime'
 let g:slime_target = "tmux"
 
@@ -42,7 +36,7 @@ Bundle 'Valloric/YouCompleteMe'
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
 " Don't suggest completions shorter than 5 characters
-let g:ycm_min_num_identifier_candidate_chars = 5
+let g:ycm_min_num_identifier_candidate_charsum_identifier_candidate_chars = 5
 
 Bundle 'tmux-complete.vim'  
 " Call this with <C-x><C-u>
@@ -253,9 +247,10 @@ nmap <Space> <Plug>RDSendLine
 " Show where the next pattern is as you type it:
 set incsearch
 
+" Nfor Nvim-R
 let R_in_buffer = 0
 let R_applescript = 0
-let R_tmux_split = 1
+let R_tmux_split = 0
 
 """""""""""""""""""""""""""""""""""""""""""""""""
 " Gundo
@@ -350,8 +345,8 @@ hi Folded ctermbg=DarkGrey
 
 " Run Space
 " Helps to select the text
-xmap <Space> <Plug>SlimeRegionSend
-nmap <Space> <Plug>SlimeLineSend
+xmap <leader><Space> <Plug>SlimeRegionSend
+nmap <leader><Space> <Plug>SlimeLineSend
 nmap <c-c>v     <Plug>SlimeConfig
 let g:slime_default_config = {"socket_name": "default", "target_pane": "1"}
 
@@ -376,7 +371,9 @@ let b:gitstat = GitStat()
 set  rulerformat=%35(%=%#VinArrow1#\%#VinArrow2#\ %t\ %l,%c\ %2P\ %{b:gitstat}%)
 autocmd BufReadPost,FileReadPost,Winenter,BufWritePost,FileWritePost * let b:gitstat = GitStat()
 
+" Need to both install at .fzf and in .vim/bundle
 set rtp+=~/.fzf
+Plugin 'junegunn/fzf.vim'
 
 " This is the default extra key bindings
 let g:fzf_action = {
@@ -413,7 +410,7 @@ nnoremap <localleader>lw :let g:vimtex_quickfix_open_on_warning = !g:vimtex_quic
 
 " Navigate quickfix
 map <C-j> :cn<CR>
-map <C-k> :cp<CR>
+" map <C-k> :cp<CR> Never use this and have now remapped <C-k>
 au FileType qf call AdjustWindowHeight(3, 10)
 function! AdjustWindowHeight(minheight, maxheight)
   exe max([min([line("$"), a:maxheight]), a:minheight]) . "wincmd _"
@@ -445,3 +442,9 @@ hi EasyMotionTarget2Second ctermbg=none ctermfg=lightred
 map f <Plug>Sneak_f
 nmap <Tab> <Plug>SneakNext
 nmap <Backspace> <Plug>SneakPrevious
+
+" Vinayak (Rhistory)
+inoremap <expr> <c-k> fzf#complete({
+   \ 'source': 'cat ~/.Rhistory',
+   \ 'down': '~30%',
+   \ 'options': '--reverse --margin 15%,0' })

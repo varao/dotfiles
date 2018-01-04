@@ -127,7 +127,8 @@ myKeys =
     , ((myModMask .|. controlMask, xK_Up), sendMessage $ pullGroup U)
     --Group Below
     , ((myModMask .|. controlMask, xK_Down), sendMessage $ pullGroup D)
-   -- resize windows
+   -- vertically resize windows
+   -- (for horizontal resizing, use xK_h and xK_l)
     , ((myModMask,               xK_a), sendMessage MirrorShrink)
     , ((myModMask,               xK_s), sendMessage MirrorExpand)
     --Merge/UnMerge
@@ -153,6 +154,7 @@ myKeys =
     , ((myModMask                , xK_x), scratchFfx)
     , ((myModMask .|. shiftMask  , xK_x), scratchChrm)
     , ((myModMask                , xK_r), scratchRemm)
+    , ((myModMask                , xK_y), scratchSkype)
 --    , ((myModMask .|. shiftMask  , xK_x), scratchWmail)
 -- also gone: xK_b, xK_w, xK_e
   ]
@@ -164,6 +166,7 @@ myKeys =
     scratchFfx   = namedScratchpadAction myScratchPads "firefox-p"
     scratchChrm  = namedScratchpadAction myScratchPads "chromium"
     scratchRemm  = namedScratchpadAction myScratchPads "remmina"
+    scratchSkype = namedScratchpadAction myScratchPads "skype"
 --    scratchWmail  = namedScratchpadAction myScratchPads "wmail"
 
 myScratchPads = [  NS "fuzzyfind"  myFzf  findFZ  (customFloating $ W.RationalRect (1/8) (1/6) (1/3) (2/3))  -- one scratchpad
@@ -172,6 +175,7 @@ myScratchPads = [  NS "fuzzyfind"  myFzf  findFZ  (customFloating $ W.RationalRe
 --                 , NS "wmail"   "~/git/INSTALL/WMail-linux-x64/WMail" findWmail nonFloating  -- one scratchpad
                  , NS "zathur"    "zathura-tabbed" findZth nonFloating  -- one scratchpad
                  , NS "remmina"    "remmina" findRemm nonFloating  -- one scratchpad
+                 , NS "skype"    "skypeforlinux" findSkype nonFloating -- one scratchpad
                 ]
   where
    findFZ   = resource  =? "fzf_term"  
@@ -179,6 +183,7 @@ myScratchPads = [  NS "fuzzyfind"  myFzf  findFZ  (customFloating $ W.RationalRe
    findFfx  = className =? "Firefox"  
    findChrm = className =? "Chromium-browser"  
    findRemm = className =? "Remmina"  
+   findSkype = className =? "Skype"  
 --   findWmail = className =? "wmail"  
 
 myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
