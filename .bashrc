@@ -165,7 +165,9 @@ alias evince="ev"
        alias vi='vim --servername VIM'
        # Add a -X option below to avoid delay opening a file because
        # vim tries to connect to X
-       alias vi='~/git/vim/src//vim --servername VIM'
+       #alias vi='~/git/vim/src//vim --servername VIM'
+       # actually now I'm using nvim
+       alias vi='nvim'
        if [ "x$TERM" == "xxterm" ] || [ "x$TERM" == "xxterm-256color" ]
        then
            function tvim(){ tmux -2 new-session "TERM=screen-256color vim --servername VIM $@" ; }
@@ -182,6 +184,7 @@ alias evince="ev"
    fi
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 export FZF_COMPLETION_TRIGGER="''"
+export FZF_TMUX=1
 
 # create a global per-pane variable that holds the pane's PWD
 # Vinayak: I hacked this up a bit
@@ -209,3 +212,5 @@ export POWERLINE_CONFIG_COMMAND=powerline-config
 #    .  /home/varao/Python/miniconda2/lib/python2.7/site-packages/powerline/bindings/bash/powerline.sh
 #fi
 export PATH=$PATH:~/.cabal/bin:~/.xmonad/bin
+
+export R_HISTFILE=~/.Rhistory
