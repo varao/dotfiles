@@ -403,12 +403,15 @@ nnoremap <c-a> :FZF ~<cr>
 hi StatusLine  ctermfg=31 ctermbg=232 cterm=NONE
 hi StatusLineNC  ctermfg=4 ctermbg=236 cterm=NONE
 
+let g:vimtex_quickfix_mode=2
 let g:vimtex_latexmk_build_dir = './build'
 let g:latex_view_general_viewer = 'zathura'
 let g:vimtex_compiler_progname = 'nvr'
 let g:vimtex_view_method = "zathura"
 hi MatchParen ctermbg=239
 let g:vimtex_quickfix_open_on_warning=0
+let g:vimtex_quickfix_blgparser = {'disable':1}
+let g:vimtex_latexmk_progname = '/home/varao/git/neovim-remote'
 
 " Do we want quickfix on warnings?
 nnoremap <localleader>lw :let g:vimtex_quickfix_open_on_warning = !g:vimtex_quickfix_open_on_warning<CR>
