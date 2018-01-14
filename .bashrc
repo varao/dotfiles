@@ -3,13 +3,10 @@
 # for examples
 
 ## Launch tmux on start
-#if command -v tmux>/dev/null; then
-#  [[ ! $TERM =~ screen ]] && [ -z $TMUX ] && exec tmux
-#fi
-[ -z "$TMUX"  ] && { tmux new-session;}  # This was: [ -z "$TMUX"  ] && { tmux attach || tmux new-session;}
+##[ -z "$TMUX"  ] && { tmux new-session;}  # This was: [ -z "$TMUX"  ] && { tmux attach || tmux new-session;}
 
-alias tma='tmux attach -d -t'
-alias git-tmux='tmux new -s $(basename $(pwd))'
+##alias tma='tmux attach -d -t'
+##alias git-tmux='tmux new -s $(basename $(pwd))'
 alias zathur='zathura-tabbed 2> /dev/null'
 alias rm='rm -I'
 
@@ -185,6 +182,8 @@ alias evince="ev"
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 export FZF_COMPLETION_TRIGGER="''"
 export FZF_TMUX=1
+# Needed for fzf in nvim terminal
+[ -n "$NVIM_LISTEN_ADDRESS" ] && export FZF_DEFAULT_OPTS='--no-height'
 
 # create a global per-pane variable that holds the pane's PWD
 # Vinayak: I hacked this up a bit
@@ -214,3 +213,28 @@ export POWERLINE_CONFIG_COMMAND=powerline-config
 export PATH=$PATH:~/.cabal/bin:~/.xmonad/bin
 
 export R_HISTFILE=~/.Rhistory
+
+# added by Anaconda3 installer
+export PATH="/home/varao/Python/anaconda3/bin:$PATH"
+
+if [ -n "${NVIM_LISTEN_ADDRESS+x}" ]; then
+  alias n='nvr'
+  alias h='nvr -o'
+  alias v='nvr -O'
+  alias t='nvr --remote-tab'
+fi
+
+## v will attach or create an abduco session running neovim and if run
+## in a neovim terminal it will open files in the existing neovim
+#v () {
+#  if [ -z "$NVIM_LISTEN_ADDRESS" ]; then
+#    abduco -A nvim nvim
+#  else
+#    nvr "$@"
+#  fi
+#}
+#alias v=v
+#export EDITOR=v
+
+infocmp $TERM | sed 's/kbs=^[hH]/kbs=\\177/' > $TERM.ti
+tic $TERM.ti

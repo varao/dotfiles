@@ -14,6 +14,7 @@ import XMonad.Layout.NoBorders (smartBorders)
 import XMonad.Layout.Spacing (smartSpacing)
 import XMonad.Layout.Simplest
 import XMonad.Layout.Named
+import XMonad.Layout.NoFrillsDecoration
 import XMonad.Util.EZConfig ( additionalKeys )
 import XMonad.Util.Font
 import XMonad.Util.Scratchpad
@@ -35,6 +36,12 @@ import qualified "dbus" DBus as D
 import qualified "dbus" DBus.Client as D
 import qualified Codec.Binary.UTF8.String as UTF8
 
+base00  = "#657b83"
+yellow  = "#b58900"
+red     = "#dc322f"
+blue    = "#268bd2"
+myFont = "-*-terminus-medium-*-*-*-*-160-*-*-*-*-*-*"
+
 myTheme = def {  
             activeColor = "#0066aa",
             inactiveColor = "#444444",
@@ -43,6 +50,21 @@ myTheme = def {
             urgentColor = "red",
 --            decoHeight = 30,
             fontName = "xft:DejaVu Sans:size=10" }
+
+-- Need to comment out addTopBar in myLayout and then uncomment
+-- for changes to take effect for some reason
+topBarTheme = def
+    { fontName              = myFont
+    , inactiveBorderColor   = base00
+    , inactiveColor         = base00
+    , inactiveTextColor     = base00
+    , activeBorderColor     = blue
+    , activeColor           = blue
+    , activeTextColor       = blue
+    , urgentBorderColor     = red
+    , urgentTextColor       = yellow
+    , decoHeight            = 3
+}
 
 ---------------------------------
 -- workaround of xmonad issue 4
@@ -75,11 +97,12 @@ fixFocus = ModifiedLayout $ FixFocus Nothing
 ---------------------------------
 
 myLayout = fixFocus $ avoidStruts  -- Makes gnome panel visible
-         $ windowNavigation 
+         $ addTopBar $ windowNavigation 
          $ addTabs shrinkText myTheme -- def: default
          $ boringWindows $ tall 
               where 
                 rt = ResizableTall 1 (3/100) (1/2) []
+                addTopBar = noFrillsDeco shrinkText topBarTheme
                 tall =  subLayout [] 
                   (Simplest ||| spiral (6/7) ||| Grid) -- 
                   $  rt 
@@ -87,11 +110,11 @@ myLayout = fixFocus $ avoidStruts  -- Makes gnome panel visible
                    ||| Full
 
 -- width of border around windows
-myBorderWidth = 5
+myBorderWidth = 0
 
 -- color of focused/inactive border
 myFocusedBorderColor = "#0066aa"
-myNormalBorderColor = "#cccccc"
+myNormalBorderColor = "#222222"
 --
 
 myStartupHook     = do
@@ -152,7 +175,7 @@ myKeys =
     , ((myModMask                , xK_f), scratchFzf)
     , ((myModMask                , xK_z), scratchZthr)
     , ((myModMask                , xK_x), scratchFfx)
-    , ((myModMask .|. shiftMask  , xK_x), scratchChrm)
+    , ((myModMask .|. shiftMask  , xK_x), scratchGChrm)
     , ((myModMask                , xK_r), scratchRemm)
     , ((myModMask                , xK_y), scratchSkype)
 --    , ((myModMask .|. shiftMask  , xK_x), scratchWmail)
@@ -165,6 +188,7 @@ myKeys =
     scratchZthr  = namedScratchpadAction myScratchPads "zathur"
     scratchFfx   = namedScratchpadAction myScratchPads "firefox-p"
     scratchChrm  = namedScratchpadAction myScratchPads "chromium"
+    scratchGChrm = namedScratchpadAction myScratchPads "ggl_chrm"
     scratchRemm  = namedScratchpadAction myScratchPads "remmina"
     scratchSkype = namedScratchpadAction myScratchPads "skype"
 --    scratchWmail  = namedScratchpadAction myScratchPads "wmail"
@@ -172,6 +196,7 @@ myKeys =
 myScratchPads = [  NS "fuzzyfind"  myFzf  findFZ  (customFloating $ W.RationalRect (1/8) (1/6) (1/3) (2/3))  -- one scratchpad
                  , NS "firefox-p"  "firefox -private-window" findFfx nonFloating  -- one scratchpad
                  , NS "chromium"   "chromium-browser" findChrm nonFloating  -- one scratchpad
+                 , NS "ggl_chrm"   "google-chrome" findGChrm nonFloating  -- one scratchpad
 --                 , NS "wmail"   "~/git/INSTALL/WMail-linux-x64/WMail" findWmail nonFloating  -- one scratchpad
                  , NS "zathur"    "zathura-tabbed" findZth nonFloating  -- one scratchpad
                  , NS "remmina"    "remmina" findRemm nonFloating  -- one scratchpad
@@ -182,6 +207,7 @@ myScratchPads = [  NS "fuzzyfind"  myFzf  findFZ  (customFloating $ W.RationalRe
    findZth  = className =? "tabbed"  
    findFfx  = className =? "Firefox"  
    findChrm = className =? "Chromium-browser"  
+   findGChrm= className =? "Google-chrome"  
    findRemm = className =? "Remmina"  
    findSkype = className =? "Skype"  
 --   findWmail = className =? "wmail"  
@@ -273,7 +299,7 @@ pangoSanitize = foldr sanitize ""
     sanitize x    xs = x:xs
 
 myLayoutPrinter :: String -> String
-myLayoutPrinter "Tabbed Full" = "F"
-myLayoutPrinter "Tabbed ResizableTall" = "|"
-myLayoutPrinter "Tabbed Mirror ResizableTall" = "-"
+myLayoutPrinter "NoFrillsDeco Tabbed Full" = "F"
+myLayoutPrinter "NoFrillsDeco Tabbed ResizableTall" = "|"
+myLayoutPrinter "NoFrillsDeco Tabbed Mirror ResizableTall" = "-"
 myLayoutPrinter x = x
