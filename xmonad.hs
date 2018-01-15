@@ -29,6 +29,7 @@ import XMonad.Layout.ResizableTile
 import XMonad.Layout.BoringWindows
 import XMonad.Layout.Grid
 
+import Data.List (isSuffixOf)
 import Data.Maybe (fromJust)
 import XMonad.Layout.LayoutModifier
 
@@ -36,11 +37,15 @@ import qualified "dbus" DBus as D
 import qualified "dbus" DBus.Client as D
 import qualified Codec.Binary.UTF8.String as UTF8
 
+isSuffixOfQ :: String -> Query String -> Query Bool
+isSuffixOfQ = fmap . isSuffixOf
+pName = stringProperty "WM_NAME"
+
 base00  = "#657b83"
 yellow  = "#b58900"
 red     = "#dc322f"
 blue    = "#268bd2"
-myFont = "-*-terminus-medium-*-*-*-*-160-*-*-*-*-*-*"
+myFont = "xft:DejaVu Sans:size=10" 
 
 myTheme = def {  
             activeColor = "#0066aa",
@@ -49,7 +54,7 @@ myTheme = def {
             activeTextColor = "#dddddd",
             urgentColor = "red",
 --            decoHeight = 30,
-            fontName = "xft:DejaVu Sans:size=10" }
+            fontName = myFont }
 
 -- Need to comment out addTopBar in myLayout and then uncomment
 -- for changes to take effect for some reason
@@ -97,17 +102,16 @@ fixFocus = ModifiedLayout $ FixFocus Nothing
 ---------------------------------
 
 myLayout = fixFocus $ avoidStruts  -- Makes gnome panel visible
-         $ addTopBar $ windowNavigation 
+         $ windowNavigation 
          $ addTabs shrinkText myTheme -- def: default
-         $ boringWindows $ tall 
+         $ boringWindows $ Full ||| tall 
               where 
                 rt = ResizableTall 1 (3/100) (1/2) []
                 addTopBar = noFrillsDeco shrinkText topBarTheme
-                tall =  subLayout [] 
+                tall =  addTopBar $ subLayout [] 
                   (Simplest ||| spiral (6/7) ||| Grid) -- 
                   $  rt 
                    -- |||spiral (6/7) ||| Mirror(rt) 
-                   ||| Full
 
 -- width of border around windows
 myBorderWidth = 0
@@ -174,8 +178,9 @@ myKeys =
 --    , ((myModMask                , xK_f), spawn myFzf)
     , ((myModMask                , xK_f), scratchFzf)
     , ((myModMask                , xK_z), scratchZthr)
-    , ((myModMask                , xK_x), scratchFfx)
-    , ((myModMask .|. shiftMask  , xK_x), scratchGChrm)
+    , ((myModMask                , xK_x), scratchFfxp)
+    , ((myModMask .|. shiftMask  , xK_x), scratchFfx)
+    , ((myModMask .|. controlMask, xK_x), scratchChrm)
     , ((myModMask                , xK_r), scratchRemm)
     , ((myModMask                , xK_y), scratchSkype)
 --    , ((myModMask .|. shiftMask  , xK_x), scratchWmail)
@@ -186,17 +191,17 @@ myKeys =
     -- named fuzzyfind and launch it"
     scratchFzf   = namedScratchpadAction myScratchPads "fuzzyfind"
     scratchZthr  = namedScratchpadAction myScratchPads "zathur"
-    scratchFfx   = namedScratchpadAction myScratchPads "firefox-p"
-    scratchChrm  = namedScratchpadAction myScratchPads "chromium"
-    scratchGChrm = namedScratchpadAction myScratchPads "ggl_chrm"
+    scratchFfxp  = namedScratchpadAction myScratchPads "firefox-p"
+    scratchFfx   = namedScratchpadAction myScratchPads "firefox"
+    scratchChrm  = namedScratchpadAction myScratchPads "chrome"
     scratchRemm  = namedScratchpadAction myScratchPads "remmina"
     scratchSkype = namedScratchpadAction myScratchPads "skype"
 --    scratchWmail  = namedScratchpadAction myScratchPads "wmail"
 
 myScratchPads = [  NS "fuzzyfind"  myFzf  findFZ  (customFloating $ W.RationalRect (1/8) (1/6) (1/3) (2/3))  -- one scratchpad
-                 , NS "firefox-p"  "firefox -private-window" findFfx nonFloating  -- one scratchpad
-                 , NS "chromium"   "chromium-browser" findChrm nonFloating  -- one scratchpad
-                 , NS "ggl_chrm"   "google-chrome" findGChrm nonFloating  -- one scratchpad
+                 , NS "firefox-p"  "firefox -private-window" findFfxp nonFloating  -- one scratchpad
+                 , NS "chrome"   "google-chrome" findChrm nonFloating  -- one scratchpad
+                 , NS "firefox"   "firefox'" findFfx nonFloating  -- one scratchpad
 --                 , NS "wmail"   "~/git/INSTALL/WMail-linux-x64/WMail" findWmail nonFloating  -- one scratchpad
                  , NS "zathur"    "zathura-tabbed" findZth nonFloating  -- one scratchpad
                  , NS "remmina"    "remmina" findRemm nonFloating  -- one scratchpad
@@ -205,9 +210,9 @@ myScratchPads = [  NS "fuzzyfind"  myFzf  findFZ  (customFloating $ W.RationalRe
   where
    findFZ   = resource  =? "fzf_term"  
    findZth  = className =? "tabbed"  
-   findFfx  = className =? "Firefox"  
-   findChrm = className =? "Chromium-browser"  
-   findGChrm= className =? "Google-chrome"  
+   findFfxp = className =? "Firefox" <&&> ("Mozilla Firefox (Private Browsing)" `isSuffixOfQ` pName)
+   findFfx  = className =? "Firefox" <&&> ("Mozilla Firefox" `isSuffixOfQ` pName)  
+   findChrm = className =? "Google-chrome"  
    findRemm = className =? "Remmina"  
    findSkype = className =? "Skype"  
 --   findWmail = className =? "wmail"  
@@ -299,7 +304,7 @@ pangoSanitize = foldr sanitize ""
     sanitize x    xs = x:xs
 
 myLayoutPrinter :: String -> String
-myLayoutPrinter "NoFrillsDeco Tabbed Full" = "F"
-myLayoutPrinter "NoFrillsDeco Tabbed ResizableTall" = "|"
-myLayoutPrinter "NoFrillsDeco Tabbed Mirror ResizableTall" = "-"
+myLayoutPrinter "Tabbed Full" = "F"
+myLayoutPrinter "Tabbed NoFrillsDeco ResizableTall" = "|"
+myLayoutPrinter "Tabbed NoFrillsDeco Mirror ResizableTall" = "-"
 myLayoutPrinter x = x
