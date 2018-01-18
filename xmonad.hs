@@ -68,7 +68,7 @@ topBarTheme = def
     , activeTextColor       = blue
     , urgentBorderColor     = red
     , urgentTextColor       = yellow
-    , decoHeight            = 3
+    , decoHeight            = 4
 }
 
 ---------------------------------
@@ -103,18 +103,20 @@ fixFocus = ModifiedLayout $ FixFocus Nothing
 
 myLayout = fixFocus $ avoidStruts  -- Makes gnome panel visible
          $ windowNavigation 
-         $ addTabs shrinkText myTheme -- def: default
-         $ boringWindows $ Full ||| tall 
+         $ boringWindows 
+         $ my_full ||| my_tall 
               where 
-                rt = ResizableTall 1 (3/100) (1/2) []
+              -- Full can have tabs but no top bar
+                my_full = addTabs shrinkText myTheme $ Full
+              -- Tall (i.e. not full) will have a top bar with tabs 
                 addTopBar = noFrillsDeco shrinkText topBarTheme
-                tall =  addTopBar $ subLayout [] 
-                  (Simplest ||| spiral (6/7) ||| Grid) -- 
-                  $  rt 
+                rt = ResizableTall 1 (3/100) (1/2) []
+                my_tall = addTopBar $ addTabs shrinkText myTheme 
+                  $ subLayout [] (Simplest ||| spiral (6/7) ||| Grid) rt 
                    -- |||spiral (6/7) ||| Mirror(rt) 
 
 -- width of border around windows
-myBorderWidth = 0
+myBorderWidth = 1
 
 -- color of focused/inactive border
 myFocusedBorderColor = "#0066aa"
@@ -123,7 +125,7 @@ myNormalBorderColor = "#222222"
 
 myStartupHook     = do
   startupHook gnomeConfig
-  spawn "xcompmgr -cfF -t-9 -l-11 -r9 -o.95 -D6 &" -- for transparencies
+  spawn "xcompmgr -cfF -t-9 -l-11 -r1 -o.05 -D0 &" -- for transparencies
  -- setWMName "HM"
  
 myManageHook = composeAll
@@ -193,15 +195,15 @@ myKeys =
     scratchZthr  = namedScratchpadAction myScratchPads "zathur"
     scratchFfxp  = namedScratchpadAction myScratchPads "firefox-p"
     scratchFfx   = namedScratchpadAction myScratchPads "firefox"
-    scratchChrm  = namedScratchpadAction myScratchPads "chrome"
+    scratchChrm  = namedScratchpadAction myScratchPads "chromium"
     scratchRemm  = namedScratchpadAction myScratchPads "remmina"
     scratchSkype = namedScratchpadAction myScratchPads "skype"
 --    scratchWmail  = namedScratchpadAction myScratchPads "wmail"
 
 myScratchPads = [  NS "fuzzyfind"  myFzf  findFZ  (customFloating $ W.RationalRect (1/8) (1/6) (1/3) (2/3))  -- one scratchpad
                  , NS "firefox-p"  "firefox -private-window" findFfxp nonFloating  -- one scratchpad
-                 , NS "chrome"   "google-chrome" findChrm nonFloating  -- one scratchpad
-                 , NS "firefox"   "firefox'" findFfx nonFloating  -- one scratchpad
+                 , NS "chromium"   "chromium-browser" findChrm nonFloating  -- one scratchpad
+                 , NS "firefox"   "firefox" findFfx nonFloating  -- one scratchpad
 --                 , NS "wmail"   "~/git/INSTALL/WMail-linux-x64/WMail" findWmail nonFloating  -- one scratchpad
                  , NS "zathur"    "zathura-tabbed" findZth nonFloating  -- one scratchpad
                  , NS "remmina"    "remmina" findRemm nonFloating  -- one scratchpad
@@ -212,7 +214,7 @@ myScratchPads = [  NS "fuzzyfind"  myFzf  findFZ  (customFloating $ W.RationalRe
    findZth  = className =? "tabbed"  
    findFfxp = className =? "Firefox" <&&> ("Mozilla Firefox (Private Browsing)" `isSuffixOfQ` pName)
    findFfx  = className =? "Firefox" <&&> ("Mozilla Firefox" `isSuffixOfQ` pName)  
-   findChrm = className =? "Google-chrome"  
+   findChrm = className =? "Chromium-browser"  
    findRemm = className =? "Remmina"  
    findSkype = className =? "Skype"  
 --   findWmail = className =? "wmail"  
@@ -252,6 +254,7 @@ main = do
            , focusedBorderColor = myFocusedBorderColor
            , normalBorderColor  = myNormalBorderColor
            , startupHook        = myStartupHook
+           , handleEventHook    = fullscreenEventHook -- For Firefox to stay in fullscreen
            , manageHook         = myManageHook 
                                     <+> namedScratchpadManageHook myScratchPads 
                                     <+> manageHook defaultConfig -- uses default too
@@ -305,6 +308,6 @@ pangoSanitize = foldr sanitize ""
 
 myLayoutPrinter :: String -> String
 myLayoutPrinter "Tabbed Full" = "F"
-myLayoutPrinter "Tabbed NoFrillsDeco ResizableTall" = "|"
-myLayoutPrinter "Tabbed NoFrillsDeco Mirror ResizableTall" = "-"
+myLayoutPrinter "NoFrillsDeco Tabbed ResizableTall" = "|"
+myLayoutPrinter "NoFrillsDeco Tabbed Mirror ResizableTall" = "-"
 myLayoutPrinter x = x

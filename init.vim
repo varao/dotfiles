@@ -15,43 +15,22 @@ Plug 'justinmk/vim-sneak'
 Plug 'haya14busa/incsearch.vim'
 Plug 'haya14busa/incsearch-fuzzy.vim'
 Plug 'sjl/gundo.vim'
-"       Bundle 'vim-syntastic/syntastic'
+Plug 'vim-syntastic/syntastic'
 
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-dispatch'
 let g:dispatch_quickfix_height=3
 
 Plug 'Valloric/YouCompleteMe'
-let g:ycm_autoclose_preview_window_after_completion = 1
-let g:ycm_autoclose_preview_window_after_insertion = 1
-" Don't suggest completions shorter than 5 characters
-let g:ycm_min_num_identifier_candidate_charsum_identifier_candidate_chars = 5
 
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 
 " Need to both install at .fzf and in .vim/bundle
-"set rtp+=~/.fzf
 "Bundle 'junegunn/fzf.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
 call plug#end()
-
-"let g:UltiSnipsExpandTrigger="<c-s>"
-let g:UltiSnipsListSnippets="<c-s>"
-
-let g:UltiSnipsExpandTrigger = "<nop>"
-let g:ulti_expand_or_jump_res = 0
-function ExpandSnippetOrCarriageReturn()
-  let snippet = UltiSnips#ExpandSnippetOrJump()
-  if g:ulti_expand_or_jump_res > 0
-    return snippet
-  else
-    return "\<CR>"
-  endif
-endfunction
-inoremap <expr> <CR> pumvisible() ? "<C-R>=ExpandSnippetOrCarriageReturn()<CR>" : "\<CR>"
-
 
 set  hlsearch
 set  expandtab
@@ -75,6 +54,8 @@ filetype on
 filetype plugin indent on
 syntax enable
 
+let maplocalleader = ","
+let mapleader = ","
 """"""""""""""""""
 nnoremap <C-Left> <C-w>h
 nnoremap <C-Right> <C-w>l
@@ -87,10 +68,6 @@ nnoremap <C-S-Right> :vertical resize +1<CR>
 nnoremap <C-S-Up> :resize -1<CR>
 nnoremap <C-S-Down> :resize +1<CR>
 """"""""""""""""""
-
-" Navigate tabs firefox style
-nnoremap <C-W><C-T> :tabprevious<CR>
-nnoremap <C-W>t   :tabnext<CR>
 
 " Tabs to splits and back
 function MoveToPrevTab()
@@ -138,13 +115,48 @@ function MoveToNextTab()
   exe "b".l:cur_buf
 endfunc
 
-nnoremap <C-W>s :call MoveToNextTab()<CR>
-nnoremap <C-W>S :call MoveToPrevTab()<CR>
+nnoremap <C-t>L :call MoveToNextTab()<CR>
+nnoremap <C-t>H :call MoveToPrevTab()<CR>
+
 " Also, <C-W><C-T> creates a new tab
+nnoremap <C-t>t  :tabnew<CR>
+"
+" Navigate tabs firefox style
+nnoremap <C-t>l   :tabnext<CR>
+nnoremap <C-t>h   :tabprevious<CR>
+
 """"""""""""""""""""""
 
 set timeout ttimeoutlen=50
+
+"au BufRead,BufNewFile *.tex setlocal makeprg=pdflatex\ %
+"au BufRead,BufNewFile *.tex setlocal makeprg=xelatex\ -shell-escape\ %
+"% filename %:r filename modifier that discards extension
+au BufRead,BufNewFile *.cc  set makeprg=g++\ -Wall\ -I/usr/local/include\ -lgsl\ -lgslcblas\ -lm\ %\ -o\ %:r
+" automatically add newline if length greater than 74
+" au BufRead,BufNewFile *.tex setlocal textwidth=74
+" set textwidth=74
+
 """""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:UltiSnipsListSnippets="<c-s>"
+
+let g:UltiSnipsExpandTrigger = "<nop>"
+let g:ulti_expand_or_jump_res = 0
+function ExpandSnippetOrCarriageReturn()
+  let snippet = UltiSnips#ExpandSnippetOrJump()
+  if g:ulti_expand_or_jump_res > 0
+    return snippet
+  else
+    return "\<CR>"
+  endif
+endfunction
+inoremap <expr> <CR> pumvisible() ? "<C-R>=ExpandSnippetOrCarriageReturn()<CR>" : "\<CR>"
+
+let g:ycm_autoclose_preview_window_after_completion = 1
+let g:ycm_autoclose_preview_window_after_insertion = 1
+" Don't suggest completions shorter than 5 characters
+let g:ycm_min_num_identifier_candidate_charsum_identifier_candidate_chars = 5
 
 " NERDTree
 let NERDTreeMapOpenSplit='"'
@@ -156,16 +168,9 @@ let g:syntastic_enable_r_svtools_checker = 1
 let g:syntastic_r_checkers=['lint']
 """""""""""""""""""""""""""""""""""""""""""""""""
 
-"au BufRead,BufNewFile *.tex setlocal makeprg=pdflatex\ %
-"au BufRead,BufNewFile *.tex setlocal makeprg=xelatex\ -shell-escape\ %
-"% filename %:r filename modifier that discards extension
-au BufRead,BufNewFile *.cc  set makeprg=g++\ -Wall\ -I/usr/local/include\ -lgsl\ -lgslcblas\ -lm\ %\ -o\ %:r
-" automatically add newline if length greater than 74
-" au BufRead,BufNewFile *.tex setlocal textwidth=74
-" set textwidth=74
-
 nnoremap <leader>m :Make<CR>
 nnoremap <leader>w :w<CR>
+nnoremap <leader>q :q<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""
 " Backup
@@ -197,13 +202,6 @@ else
   inoremap <Nul> <C-x><C-o>
 endif
 
-" Press the space bar to send lines and selection to R:
-vmap <Space> <Plug>RDSendSelection
-nmap <Space> <Plug>RDSendLine
-"
-" The lines below are suggestions for Vim in general and are not
-" specific to the improvement of Nvim-R.
-"
 " Show where the next pattern is as you type it:
 set incsearch
 
@@ -211,6 +209,10 @@ set incsearch
 let R_in_buffer = 0
 let R_applescript = 0
 let R_tmux_split = 0
+
+" Press the space bar to send lines and selection to R:
+vmap <Space> <Plug>RDSendSelection
+nmap <Space> <Plug>RDSendLine
 
 """"""""""""""""""""
 " For neovim terminal
@@ -223,13 +225,6 @@ autocmd TermOpen * startinsert
 "autocmd BufWinEnter,WinEnter term://* startinsert
 
 au TermOpen * setlocal nonumber norelativenumber
-
-function! s:buflist()
-  redir => ls
-  silent ls
-  redir END
-  return split(ls, '\n')
-endfunction
 
 function! s:bufopen(e)
   execute 'buffer' matchstr(a:e, '^[ 0-9]*')
@@ -354,9 +349,12 @@ hi Error ctermfg=Red  ctermbg=Black gui=bold,underline
 hi ErrorMsg ctermfg=1  ctermbg=8 gui=bold,underline
 hi SpellBad ctermfg=Black  ctermbg=Red gui=bold,underline
 hi Folded ctermbg=DarkGrey
+hi Visual ctermbg=Black
 
-" Disable folding by vimlatex
-" autocmd Filetype tex setlocal nofoldenable
+hi TabLineFill ctermfg=232 ctermbg=232
+hi TabLine ctermfg=Blue ctermbg=232
+hi TabLineSel ctermfg=Blue ctermbg=Black
+hi clear ModeMsg  " So -- INSERT -- etc aren't bright
 
 " Run Space
 " Helps to select the text
@@ -406,6 +404,7 @@ hi MatchParen ctermbg=239
 let g:vimtex_quickfix_open_on_warning=0
 let g:vimtex_quickfix_blgparser = {'disable':1}
 let g:vimtex_latexmk_progname = '/home/varao/git/neovim-remote'
+let g:vimtex_complete_recursive_bib = 1
 
 " Do we want quickfix on warnings?
 nnoremap <localleader>lw :let g:vimtex_quickfix_open_on_warning = !g:vimtex_quickfix_open_on_warning<CR>
@@ -422,7 +421,7 @@ highlight Pmenu ctermbg=238 ctermfg=202 gui=bold
 highlight PmenuSel  ctermbg=240 ctermfg=202 gui=bold
 
 "autocmd BufEnter * call system("tmux rename-window " . expand("%:t"). '\ ['. expand(v:servername).']')
-autocmd VimLeave * call system("tmux rename-window bash")
+" autocmd VimLeave * call system("tmux rename-window bash")
 " autocmd BufEnter * let &titlestring = ' ' . expand("%:t")                                                                 
 " set title
 
