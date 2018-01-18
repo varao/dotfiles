@@ -4,33 +4,22 @@ filetype off
 call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'lervag/vimtex'
-"Bundle 'ctrlp.vim'
 Plug 'flazz/vim-colorschemes'
 
 Plug 'roxma/nvim-completion-manager'
 Plug 'jalvesaq/Nvim-R', { 'for' : 'r' }
-"Bundle 'gaalcaras/ncm-R'
 
 Plug 'godlygeek/tabular'
-"       Bundle 'vim-scripts/Vim-R-plugin'
-"       Bundle 'vim-scripts/Screen-vim---gnu-screentmux'
-"Bundle 'joequery/Stupid-EasyMotion'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'justinmk/vim-sneak'
 Plug 'haya14busa/incsearch.vim'
 Plug 'haya14busa/incsearch-fuzzy.vim'
-"       Bundle 'kien/ctrlp.vim'
 Plug 'sjl/gundo.vim'
 "       Bundle 'vim-syntastic/syntastic'
 
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-dispatch'
-"Plug 'oblitum/frawor'
-"Plug 'vim-scripts/aurum'
 let g:dispatch_quickfix_height=3
-
-Plug 'jpalardy/vim-slime'
-let g:slime_target = "tmux"
 
 Plug 'Valloric/YouCompleteMe'
 let g:ycm_autoclose_preview_window_after_completion = 1
@@ -38,14 +27,6 @@ let g:ycm_autoclose_preview_window_after_insertion = 1
 " Don't suggest completions shorter than 5 characters
 let g:ycm_min_num_identifier_candidate_charsum_identifier_candidate_chars = 5
 
-Plug 'wellle/tmux-complete.vim'  
-" Call this with <C-x><C-u>
-" I commented out lines in Youcompleteme/autoload/youcompleteme.vim
-" so that the line below isn't overwritten
-execute "set completefunc=tmuxcomplete#complete"
-" Actually I uncommented it, and added this shortcut
-" nnoremap <leader><Tab> :set completefunc=tmuxcomplete#complete<CR>
-"
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 
@@ -94,13 +75,18 @@ filetype on
 filetype plugin indent on
 syntax enable
 
-let mapleader=","
-let maplocalleader=","
+""""""""""""""""""
+nnoremap <C-Left> <C-w>h
+nnoremap <C-Right> <C-w>l
+nnoremap <C-Up> <C-w>k
+nnoremap <C-Down> <C-w>j
+nnoremap <C-=> <C-w>=
 
-
-" Actually I uncommented it, and added this shortcut
-" See comment earlier, I need this after I define mapleader
-nnoremap <leader><Tab> :set completefunc=tmuxcomplete#complete<CR>
+nnoremap <C-S-Left> :vertical resize -1<CR>
+nnoremap <C-S-Right> :vertical resize +1<CR>
+nnoremap <C-S-Up> :resize -1<CR>
+nnoremap <C-S-Down> :resize +1<CR>
+""""""""""""""""""
 
 " Navigate tabs firefox style
 nnoremap <C-W><C-T> :tabprevious<CR>
@@ -109,15 +95,6 @@ nnoremap <C-W>t   :tabnext<CR>
 " Tabs to splits and back
 function MoveToPrevTab()
 
-" Alt keys
-  let c='a'
-while c <= 'z'
-  exec "set <A-".c.">=\e".c
-  exec "imap \e".c." <A-".c.">"
-  let c = nr2char(1+char2nr(c))
-endw
-
-set timeout ttimeoutlen=50
   "there is only one window
   if tabpagenr('$') == 1 && winnr('$') == 1
     return
@@ -166,33 +143,9 @@ nnoremap <C-W>S :call MoveToPrevTab()<CR>
 " Also, <C-W><C-T> creates a new tab
 """"""""""""""""""""""
 
-"execute pathogen#infect()
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""
-" Allow vim to see Alt
-" let c='a'
-" while c <= 'z'
-"   exec "set <A-".c.">=\e".c
-"   exec "imap \e".c." <A-".c.">"
-"   let c = nr2char(1+char2nr(c))
-" endw
-
 set timeout ttimeoutlen=50
 """""""""""""""""""""""""""""""""""""""""""""""""
 
-"""""""""""""""""""""""""""""""""""""""""""""""""
-" CtrlP
-"let g:ctrlp_map = '<c-p>'
-"let g:ctrlp_prompt_mappings = {
-"    \ 'AcceptSelection("h")': ['<cr>', '<2-LeftMouse>'],
-"    \ 'AcceptSelection("e")': ['<c-x>'],
-"    \ 'AcceptSelection("t")': ['<c-t>'],
-"    \ 'AcceptSelection("v")': ['<NL>', '<RightMouse>'],
-"    \ }
-"""""""""""""""""""""""""""""""""""""""""""""""""
-
-"""""""""""""""""""""""""""""""""""""""""""""""""
 " NERDTree
 let NERDTreeMapOpenSplit='"'
 let NERDTreeMapOpenVSplit='%'
@@ -209,7 +162,7 @@ let g:syntastic_r_checkers=['lint']
 au BufRead,BufNewFile *.cc  set makeprg=g++\ -Wall\ -I/usr/local/include\ -lgsl\ -lgslcblas\ -lm\ %\ -o\ %:r
 " automatically add newline if length greater than 74
 " au BufRead,BufNewFile *.tex setlocal textwidth=74
-set textwidth=74
+" set textwidth=74
 
 nnoremap <leader>m :Make<CR>
 nnoremap <leader>w :w<CR>
@@ -218,6 +171,7 @@ nnoremap <leader>w :w<CR>
 " Backup
 set undofile
 set undodir=~/.local/share/nvim/tmp/undo/   " Have to make this folder
+set undolevels=5000
 """""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""""""""
@@ -257,6 +211,61 @@ set incsearch
 let R_in_buffer = 0
 let R_applescript = 0
 let R_tmux_split = 0
+
+""""""""""""""""""""
+" For neovim terminal
+tnoremap <Esc> <C-\><C-n>
+
+command! -nargs=* T split | terminal <args>
+command! -nargs=* VT vsplit | terminal <args>
+
+autocmd TermOpen * startinsert
+"autocmd BufWinEnter,WinEnter term://* startinsert
+
+au TermOpen * setlocal nonumber norelativenumber
+
+function! s:buflist()
+  redir => ls
+  silent ls
+  redir END
+  return split(ls, '\n')
+endfunction
+
+function! s:bufopen(e)
+  execute 'buffer' matchstr(a:e, '^[ 0-9]*')
+endfunction
+
+" Select buffers with FZF
+" @see https://github.com/junegunn/fzf/wiki/Examples-(vim)#select-buffer
+function! s:buflist()
+  redir => ls
+  silent ls
+  redir END
+  return split(ls, '\n')
+endfunction
+
+function! s:bufopen(lines)
+  if len(a:lines) < 2 | return | endif
+
+  let cmd = get({'ctrl-h': 'sbuffer',
+      \ 'ctrl-v': 'vert sbuffer',
+      \ 'ctrl-t': 'tab sb',
+      \ 'ctrl-d': 'bd'}, a:lines[0], 'buffer')
+  let list = a:lines[1:]
+
+  let first = list[0]
+  execute cmd matchstr(first, '^[ 0-9]*')
+endfunction
+
+nnoremap <silent> <Leader>b :call fzf#run({
+  \   'source':  reverse(<sid>buflist()),
+  \   'sink*':    function('<sid>bufopen'),
+  \   'options': '+m --ansi --expect=ctrl-t,ctrl-v,ctrl-x,ctrl-d',
+  \   'down':    len(<sid>buflist()) + 2
+  \ })<CR>
+
+""""""""""""""""""""
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""
 " Gundo
@@ -360,22 +369,7 @@ let g:slime_default_config = {"socket_name": "default", "target_pane": "1"}
 hi VinArrow1 ctermfg=236 ctermbg=232
 hi VinArrow2 ctermfg=31 ctermbg=236
 
-function GitStat()
-    let gitstat = system("git status --porcelain " . shellescape(expand("%")))[0:1]
-    if gitstat ==? "fa"  
-      return " "
-    elseif gitstat ==? "??"
-      return "?"
-    elseif gitstat ==? ""
-      return "✓"
-    else
-      return substitute(gitstat, " ", "","")
-    endif
-endfunction
-
-let b:gitstat = GitStat()
-set  rulerformat=%35(%=%#VinArrow1#\%#VinArrow2#\ %t\ %l,%c\ %2P\ %{b:gitstat}%)
-autocmd BufReadPost,FileReadPost,Winenter,BufWritePost,FileWritePost * let b:gitstat = GitStat()
+set  rulerformat=%35(%=%#VinArrow1#\%#VinArrow2#\ %t\ %l,%c\ %2P%) "\ %{b:gitstat}%)
 
 
 " This is the default extra key bindings
@@ -403,12 +397,15 @@ nnoremap <c-a> :FZF ~<cr>
 hi StatusLine  ctermfg=31 ctermbg=232 cterm=NONE
 hi StatusLineNC  ctermfg=4 ctermbg=236 cterm=NONE
 
+let g:vimtex_quickfix_mode=2
 let g:vimtex_latexmk_build_dir = './build'
 let g:latex_view_general_viewer = 'zathura'
 let g:vimtex_compiler_progname = 'nvr'
 let g:vimtex_view_method = "zathura"
 hi MatchParen ctermbg=239
 let g:vimtex_quickfix_open_on_warning=0
+let g:vimtex_quickfix_blgparser = {'disable':1}
+let g:vimtex_latexmk_progname = '/home/varao/git/neovim-remote'
 
 " Do we want quickfix on warnings?
 nnoremap <localleader>lw :let g:vimtex_quickfix_open_on_warning = !g:vimtex_quickfix_open_on_warning<CR>
@@ -424,7 +421,7 @@ endfunction
 highlight Pmenu ctermbg=238 ctermfg=202 gui=bold
 highlight PmenuSel  ctermbg=240 ctermfg=202 gui=bold
 
-autocmd BufEnter * call system("tmux rename-window " . expand("%:t"). '\ ['. expand(v:servername).']')
+"autocmd BufEnter * call system("tmux rename-window " . expand("%:t"). '\ ['. expand(v:servername).']')
 autocmd VimLeave * call system("tmux rename-window bash")
 " autocmd BufEnter * let &titlestring = ' ' . expand("%:t")                                                                 
 " set title
