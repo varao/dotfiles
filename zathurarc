@@ -1,0 +1,22 @@
+set recolor false
+set recolor-darkcolor "#93a1a1"
+set recolor-lightcolor "#073642"
+
+set window-title-basename "true"
+set selection-clipboard "clipboard"
+
+set guioptions ""
+set window-height 1000
+set window-width 1000
+set adjust-open "width"
+set advance-pages-per-row true
+set render-loading false
+set scroll-full-overlap 0.10
+set scroll-page-aware true
+set window-title-page true
+set zoom-max 1600
+set zoom-min 1
+set first-page-column 2
+map c recolor
+map <Right> navigate next
+map <Left> navigate previous
