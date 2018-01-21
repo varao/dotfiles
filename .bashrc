@@ -6,7 +6,6 @@
 ##[ -z "$TMUX"  ] && { tmux new-session;}  # This was: [ -z "$TMUX"  ] && { tmux attach || tmux new-session;}
 
 ##alias tma='tmux attach -d -t'
-##alias git-tmux='tmux new -s $(basename $(pwd))'
 alias zathur='zathura-tabbed 2> /dev/null'
 alias rm='rm -I'
 
@@ -73,17 +72,9 @@ if (length($0) > 14) { if (NF>4) print $1 "/" $2 "/.../" $(NF-1) "/" $NF;
 else if (NF>3) print $1 "/" $2 "/.../" $NF;
 else print $1 "/.../" $NF; }
 else print $0;}'"'"')'
-#PS1='$(eval "echo $USER:${MYPS}")$ '
 PS1='$(eval "echo ${MYPS}")$ '
 
-#   if [ "$color_prompt" = yes ]; then
-#   #    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-#       PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-#   else
-#   #    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-#       PS1='${debian_chroot:+($debian_chroot)}\u:\w\$ '
-#   fi
-   unset color_prompt force_color_prompt
+unset color_prompt force_color_prompt
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
@@ -136,10 +127,6 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
-
-alias ls='ls --color'
-#LS_COLORS='di=1:fi=0:ln=31:pi=5:so=5:bd=5:cd=5:or=31:mi=0:ex=35:*.rpm=90'
-#export LS_COLORS
 
 set -o vi
 
@@ -196,20 +183,11 @@ pdfcat () {
 PATH=$PATH:$HOME/bin
 MANPATH=$MANPATH:$HOME/share/man
 
-# added by Miniconda2 4.0.5 installer
-export PATH="/home/varao/Python/miniconda2/bin:$PATH"
-
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
 export POWERLINE_CONFIG_COMMAND=powerline-config
 
-#if [ -f `which powerline-daemon` ]; then
-#    powerline-daemon -q
-#    POWERLINE_BASH_CONTINUATION=1
-#    POWERLINE_BASH_SELECT=1
-#    .  /home/varao/Python/miniconda2/lib/python2.7/site-packages/powerline/bindings/bash/powerline.sh
-#fi
 export PATH=$PATH:~/.cabal/bin:~/.xmonad/bin
 
 export R_HISTFILE=~/.Rhistory
@@ -236,5 +214,8 @@ fi
 #alias v=v
 #export EDITOR=v
 
-infocmp $TERM | sed 's/kbs=^[hH]/kbs=\\177/' > $TERM.ti
-tic $TERM.ti
+#infocmp $TERM | sed 's/kbs=^[hH]/kbs=\\177/' > $TERM.ti
+#tic $TERM.ti
+
+# If bash is executed after FZF, then this opens a file with nvim and 
+# exits bash after closing

@@ -1,0 +1,18 @@
+@import url("resource:///org/pop-project/gtk-3.18-nokto/gtk-contained-dark.css");
+
+.scrollbar {
+  -GtkRange-slider-width: 8;
+  -GtkRange-trough-border: -2;
+}
+
+.gnome-panel-menu-bar.menubar,
+PanelApplet > GtkMenuBar.menubar,
+PanelToplevel,
+PanelWidget,
+PanelAppletFrame,
+PanelApplet {
+  font-weight: normal;
+  color: #BAC3CF;
+  background-color: #474847; }
+
+

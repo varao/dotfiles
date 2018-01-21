@@ -7,13 +7,14 @@ function run_sel() {
   if [ -z "${f_fzf// }" ]; then 
     spwn_cmd="" 
   elif [ -d "$f_fzf" ]; then 
-    spwn_cmd="gnome-terminal --working-directory=$f_fzf"
+    spwn_cmd="gnome-terminal "
   elif [ ${f_fzf: -4} == ".pdf" ]; then
     spwn_cmd="nohup zathura-tabbed $f_fzf &> /dev/null &"
   elif [ ${f_fzf: -5} == ".html" ]; then
     spwn_cmd="nohup firefox --private-window $f_fzf &> /dev/null &"
   else 
-    spwn_cmd="gnome-terminal -e \"nvim $f_fzf\"" 
+
+    spwn_cmd="gnome-terminal -e \"nvim $f_fzf\" &> /dev/null" 
   fi
   eval $spwn_cmd
 }
@@ -34,4 +35,6 @@ done
 # installed bfs from https://github.com/tavianator/bfs, branch exclude
 
 '
-
+# spwn_cmd used to be:
+#   spwn_cmd="AFTER_FZF=\"nvim $f_fzf ; exit\" gnome-terminal " 
+# and .bash_rc used to have eval $AFTER_FZF at the end    

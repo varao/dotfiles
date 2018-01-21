@@ -1,7 +1,7 @@
 set nocompatible
 filetype off
 
-call plug#begin('~/.local/share/nvim/plugged')
+call plug#begin('/home/varao/.local/share/nvim/plugged')
 
 Plug 'lervag/vimtex'
 Plug 'flazz/vim-colorschemes'
@@ -40,6 +40,8 @@ set  nowrap
 set  ruler
 set  lazyredraw
 set  mouse=a
+" A hack for when I call nvim directly from gnome-terminal without bash
+let $PATH .= ":/home/varao/Python/anaconda3/bin"
 
 set  relativenumber
 set  number
