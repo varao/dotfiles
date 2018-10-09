@@ -9,7 +9,7 @@ function run_sel() {
   elif [ -d "$f_fzf" ]; then 
     spwn_cmd="gnome-terminal "
   elif [ ${f_fzf: -4} == ".pdf" ]; then
-    spwn_cmd="nohup zathura-tabbed $f_fzf &> /dev/null &"
+    spwn_cmd="nohup qpdfview --unique $f_fzf &> /dev/null &"
   elif [ ${f_fzf: -5} == ".html" ]; then
     spwn_cmd="nohup firefox --private-window $f_fzf &> /dev/null &"
   else 

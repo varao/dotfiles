@@ -192,7 +192,7 @@ myKeys =
     -- this simply means "find the scratchpad in myScratchPads that is 
     -- named fuzzyfind and launch it"
     scratchFzf   = namedScratchpadAction myScratchPads "fuzzyfind"
-    scratchZthr  = namedScratchpadAction myScratchPads "zathur"
+    scratchZthr  = namedScratchpadAction myScratchPads "pdfviewer"
     scratchFfxp  = namedScratchpadAction myScratchPads "firefox-p"
     scratchFfx   = namedScratchpadAction myScratchPads "firefox"
     scratchChrm  = namedScratchpadAction myScratchPads "chromium"
@@ -201,18 +201,22 @@ myKeys =
 --    scratchWmail  = namedScratchpadAction myScratchPads "wmail"
 
 myScratchPads = [  NS "fuzzyfind"  myFzf  findFZ  (customFloating $ W.RationalRect (1/8) (1/6) (1/3) (2/3))  -- one scratchpad
-                 , NS "firefox-p"  "firefox -private-window" findFfxp nonFloating  -- one scratchpad
+                 , NS "firefox-p"  "brave-browser --incognito" findFfxp nonFloating  -- one scratchpad
+--                 , NS "firefox-p"  "firefox -private-window" findFfxp nonFloating  -- one scratchpad
                  , NS "chromium"   "chromium-browser" findChrm nonFloating  -- one scratchpad
                  , NS "firefox"   "firefox" findFfx nonFloating  -- one scratchpad
 --                 , NS "wmail"   "~/git/INSTALL/WMail-linux-x64/WMail" findWmail nonFloating  -- one scratchpad
-                 , NS "zathur"    "zathura-tabbed" findZth nonFloating  -- one scratchpad
+--                 , NS "pdfviewer"    "zathura-tabbed" findPdf nonFloating  -- one scratchpad
+                 , NS "pdfviewer"    "qpdfview --unique" findPdf nonFloating  -- one scratchpad
                  , NS "remmina"    "remmina" findRemm nonFloating  -- one scratchpad
                  , NS "skype"    "skypeforlinux" findSkype nonFloating -- one scratchpad
                 ]
   where
    findFZ   = resource  =? "fzf_term"  
-   findZth  = className =? "tabbed"  
-   findFfxp = className =? "Firefox" <&&> ("Mozilla Firefox (Private Browsing)" `isSuffixOfQ` pName)
+--   findPdf  = className =? "tabbed"  
+   findPdf  = className =? "qpdfview"  
+--   findFfxp = className =? "Firefox" <&&> ("Mozilla Firefox (Private Browsing)" `isSuffixOfQ` pName)
+   findFfxp = className =? "Brave-browser"
    findFfx  = className =? "Firefox" <&&> ("Mozilla Firefox" `isSuffixOfQ` pName)  
    findChrm = className =? "Chromium-browser"  
    findRemm = className =? "Remmina"  
