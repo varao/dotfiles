@@ -29,6 +29,9 @@ import XMonad.Layout.ResizableTile
 import XMonad.Layout.BoringWindows
 import XMonad.Layout.Grid
 
+import XMonad.Layout.MultiToggle
+import XMonad.Layout.MultiToggle.Instances
+
 import Data.List (isSuffixOf)
 import Data.Maybe (fromJust)
 import XMonad.Layout.LayoutModifier
@@ -100,10 +103,22 @@ instance LayoutModifier FixFocus Window where
 fixFocus :: LayoutClass l a => l a -> ModifiedLayout FixFocus l a
 fixFocus = ModifiedLayout $ FixFocus Nothing
 ---------------------------------
+-- Show desktop
+data EmptyLayout a = EmptyLayout deriving (Show, Read)
 
+instance LayoutClass EmptyLayout a where
+    doLayout a b _ = emptyLayout a b
+    description _ = "*"
+
+data HIDE = HIDE deriving (Read, Show, Eq, Typeable)
+instance Transformer HIDE Window where
+    transform _ x k = k (EmptyLayout) (\(EmptyLayout) -> x)
+
+---------------------------------
 myLayout = fixFocus $ avoidStruts  -- Makes gnome panel visible
          $ windowNavigation 
          $ boringWindows 
+         $ mkToggle (single HIDE)  -- Shows desktop
          $ my_full ||| my_tall 
               where 
               -- Full can have tabs but no top bar
@@ -125,7 +140,7 @@ myNormalBorderColor = "#222222"
 
 myStartupHook     = do
   startupHook gnomeConfig
-  spawn "xcompmgr -cfF -t-9 -l-11 -r1 -o.05 -D0 &" -- for transparencies
+  spawn "xcompmgr -c -t-9 -l-11 -r1 -o.05 -D0 &" -- for transparencies (add -fF for fade effects)
  -- setWMName "HM"
  
 myManageHook = composeAll
@@ -169,6 +184,8 @@ myKeys =
     , ((myModMask .|. controlMask, xK_k), onGroup W.focusUp')
     , ((myModMask .|. controlMask, xK_j), onGroup W.focusDown')
     , ((myModMask .|. controlMask, xK_space),  toSubl NextLayout)
+    --Show desktop
+    , ((myModMask,               xK_d), sendMessage $ Toggle HIDE)
     --Grid of open windows
     , ((myModMask, xK_g), goToSelected myGSConfig)
     --BoringWindows: groups clustered windows
@@ -179,9 +196,10 @@ myKeys =
     , ((myModMask                , xK_p), spawn myLauncher)
 --    , ((myModMask                , xK_f), spawn myFzf)
     , ((myModMask                , xK_f), scratchFzf)
-    , ((myModMask                , xK_z), scratchZthr)
-    , ((myModMask                , xK_x), scratchFfxp)
-    , ((myModMask .|. shiftMask  , xK_x), scratchFfx)
+    , ((myModMask                , xK_z), scratchFfx)
+    , ((myModMask .|. shiftMask  , xK_z), scratchZthr)
+    , ((myModMask                , xK_x), scratchBrave)
+    , ((myModMask .|. shiftMask  , xK_x), scratchFfxp)
     , ((myModMask .|. controlMask, xK_x), scratchChrm)
     , ((myModMask                , xK_r), scratchRemm)
     , ((myModMask                , xK_y), scratchSkype)
@@ -194,6 +212,7 @@ myKeys =
     scratchFzf   = namedScratchpadAction myScratchPads "fuzzyfind"
     scratchZthr  = namedScratchpadAction myScratchPads "pdfviewer"
     scratchFfxp  = namedScratchpadAction myScratchPads "firefox-p"
+    scratchBrave = namedScratchpadAction myScratchPads "brave-p"
     scratchFfx   = namedScratchpadAction myScratchPads "firefox"
     scratchChrm  = namedScratchpadAction myScratchPads "chromium"
     scratchRemm  = namedScratchpadAction myScratchPads "remmina"
@@ -201,8 +220,8 @@ myKeys =
 --    scratchWmail  = namedScratchpadAction myScratchPads "wmail"
 
 myScratchPads = [  NS "fuzzyfind"  myFzf  findFZ  (customFloating $ W.RationalRect (1/8) (1/6) (1/3) (2/3))  -- one scratchpad
-                 , NS "firefox-p"  "brave-browser --incognito" findFfxp nonFloating  -- one scratchpad
---                 , NS "firefox-p"  "firefox -private-window" findFfxp nonFloating  -- one scratchpad
+                 , NS "brave-p"  "brave-browser --incognito" findBravep nonFloating  -- one scratchpad
+                 , NS "firefox-p"  "firefox -private-window" findFfxp nonFloating  -- one scratchpad
                  , NS "chromium"   "chromium-browser" findChrm nonFloating  -- one scratchpad
                  , NS "firefox"   "firefox" findFfx nonFloating  -- one scratchpad
 --                 , NS "wmail"   "~/git/INSTALL/WMail-linux-x64/WMail" findWmail nonFloating  -- one scratchpad
@@ -212,15 +231,15 @@ myScratchPads = [  NS "fuzzyfind"  myFzf  findFZ  (customFloating $ W.RationalRe
                  , NS "skype"    "skypeforlinux" findSkype nonFloating -- one scratchpad
                 ]
   where
-   findFZ   = resource  =? "fzf_term"  
+   findFZ     = resource  =? "fzf_term"  
 --   findPdf  = className =? "tabbed"  
-   findPdf  = className =? "qpdfview"  
---   findFfxp = className =? "Firefox" <&&> ("Mozilla Firefox (Private Browsing)" `isSuffixOfQ` pName)
-   findFfxp = className =? "Brave-browser"
-   findFfx  = className =? "Firefox" <&&> ("Mozilla Firefox" `isSuffixOfQ` pName)  
-   findChrm = className =? "Chromium-browser"  
-   findRemm = className =? "Remmina"  
-   findSkype = className =? "Skype"  
+   findPdf    = className =? "qpdfview"  
+   findFfxp = className =? "Firefox" <&&> ("Mozilla Firefox (Private Browsing)" `isSuffixOfQ` pName)
+   findBravep = className =? "Brave-browser"
+   findFfx    = className =? "Firefox" <&&> ("Mozilla Firefox" `isSuffixOfQ` pName)  
+   findChrm   = className =? "Chromium-browser"  
+   findRemm   = className =? "Remmina"  
+   findSkype  = className =? "Skype"  
 --   findWmail = className =? "wmail"  
 
 myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $

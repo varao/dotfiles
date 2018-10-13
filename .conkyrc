@@ -1,0 +1,125 @@
+-- vim: ts=4 sw=4 noet ai cindent syntax=lua
+--[[
+Conky, a system monitor, based on torsmo
+
+Any original torsmo code is licensed under the BSD license
+
+All code written since the fork of torsmo is licensed under the GPL
+
+Please see COPYING for details
+
+Copyright (c) 2004, Hannu Saransaari and Lauri Hakkarainen
+Copyright (c) 2005-2012 Brenden Matthews, Philip Kovacs, et. al. (see AUTHORS)
+All rights reserved.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+]]
+
+-- sh -c "conky -x 750; conky -x 2500"
+
+conky.config = {
+   background = true,
+update_interval = 1,
+update_interval_on_battery = 2,
+
+double_buffer = true,
+no_buffers = true,
+text_buffer_size = 2048,
+own_window = yes,
+
+gap_x = 750,
+gap_y = 35,
+minimum_width = 200, minimum_height = 200,
+maximum_width = 1400,
+own_window = true,
+own_window_type = 'dock',
+
+own_window_argb_visual = true,
+own_window_transparent = true,
+
+own_window_transparent = true,
+own_window_argb_visual = true,
+
+own_window_class = 'conky-semi',
+own_window_hints = 'undecorated,sticky,skip_taskbar,skip_pager,below',
+border_inner_margin = 0,
+border_outer_margin = 0,
+
+times_in_seconds = true,
+
+-- EDIT THIS TO CHANGE POSITION
+alignment = 'middle_left',
+
+draw_shades = false,
+draw_outline = false,
+draw_borders = false,
+draw_graph_borders = false,
+
+override_utf8_locale = true,
+use_xft = true,
+font = 'Open Sans Light:size=20',
+xftalpha = 0.5,
+uppercase = false,
+
+-- Defining colors
+default_color = '#CCCCCC',
+
+top_name_width = 10,
+};
+
+conky.text = [[
+${voffset 150}$hr
+${voffset -5}${font Fira Sans :size=45}${time %R}${font}${voffset -5}
+${voffset 2}${font Fira Sans Light:size=15} ${time %a }${time %b} ${time %e}${font}
+${voffset -140}
+${goto 350}${font size=15}${voffset 15}Battery ${alignr}(${format_time $battery_time "\hh \mm"}, ${battery_percent}%) ${color grey}${battery_bar 6,50}${color DAD7D3}
+${goto 350}${voffset 2}Uptime ${alignr}${format_time $uptime_short "\hh \mm"}
+${goto 350}${voffset 3}Wifi ${alignr}${wireless_essid}${voffset -5}
+ ${goto 350}${voffset 9} ${alignr}${wireless_bitrate wlp58s0} (${wireless_link_qual_perc wlp58s0}%)   ${color AEA79F}${wireless_link_bar 6,50 wlp58s0}${color DAD7D3}
+
+${voffset 20}${font size=10}
+ ${goto 350}CPU Cores 1,2 ${alignr}${freq 1} MHz  ${color AEA79F}${cpubar cpu1 6,50}${color DAD7D3}  ${freq 2} MHz  ${color AEA79F}${cpubar cpu2 6,50}${color DAD7D3}
+ ${goto 350}CPU Cores 3,4 ${alignr}${freq 3} MHz  ${color AEA79F}${cpubar cpu3 6,50}${color DAD7D3}  ${freq 4} MHz  ${color AEA79F}${cpubar cpu4 6,50}${color DAD7D3}
+ ${goto 350}CPU Load ${alignr}${color AEA79F}${loadgraph 18,145 7E290D DA4816}${color DAD7D3}
+ ${goto 350}Mem Load ${alignr}${color AEA79F}${memgraph 18,145 7E290D DA4816}${color DAD7D3}
+ ${goto 350}Memory, Swap ${alignr}${memmax}  ${color AEA79F}${membar 6,50}${color DAD7D3}     ${swapmax}  ${color AEA79F}${swapbar 6,50}${color DAD7D3}
+ ${goto 350}File System ${alignr}${fs_free}/${fs_size}  ${color AEA79F}${fs_bar 6,50}${color DAD7D3}
+${font}
+
+${voffset -270}
+${font Inconsolata:size=13}
+${goto 000}Processes ($processes)
+${goto 000}${color grey} Name         PID   CPU%  MEM%
+${goto 000} ${top name 1} ${top pid 1}${top cpu 1}${top mem 1}
+${goto 000} ${top name 2} ${top pid 2}${top cpu 2}${top mem 2}
+${goto 000} ${top name 3} ${top pid 3}${top cpu 3}${top mem 3}
+${goto 000} ${top name 4} ${top pid 4}${top cpu 4}${top mem 4}
+${goto 000} ${top name 5} ${top pid 5}${top cpu 5}${top mem 5}
+${goto 000} ${top name 6} ${top pid 6}${top cpu 6}${top mem 6}
+${top}
+${color}
+${font}
+
+${voffset -60}
+$hr
+${voffset -80}
+${font Inconsolata:size=14}
+${execi 300 gcalcli --conky --nocolor --lineart unicode --calendar "vinayak.apr" calw -w 16 --noweekend "`date`" 1}
+${font}
+
+]];
+
+--${execi 1 gcalcli --conky --nocolor --lineart unicode --calendar "vinayak.apr" calw -w 15 2 2}
+
+--Sytem Temp ${alignr}${acpitemp}°C
+-- ${goto 300}Ext. IP Addr. ${alignr}${exec curl -s www.icanhazip.com}${font}
