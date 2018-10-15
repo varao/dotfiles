@@ -30,7 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -- Also, added the two lines below to cron (crontab -e)
 -- PATH=/home/varao/Python/anaconda3/bin:/home/varao/Python/anaconda3/bin:/home/varao/bin:/home/varao/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/varao/.fzf/bin:/home/varao/bin:/home/varao/.cabal/bin:/home/varao/.xmonad/bin:/home/varao/Python/anaconda3/bin:/home/varao/bin:/home/varao/.cabal/bin:/home/varao/.xmonad/bin
--- */30 * * * * /home/varao/git/dotfiles/gcalcli.sh
+-- */30 * * * * /home/varao/git/dotfiles/cron_gcalcli.sh
 
 conky.config = {
    background = true,
@@ -121,16 +121,16 @@ ${voffset -90}
 $hr
 ${voffset -50}
 ${font Inconsolata:size=14}
-${alignr}${execi 333 sed -n '1p' ~/Dropbox/PERS/todo.txt }
-${alignr}${execi 333 sed -n '2p' ~/Dropbox/PERS/todo.txt }
-${alignr}${execi 333 sed -n '3p' ~/Dropbox/PERS/todo.txt }
-${alignr}${execi 333 sed -n '4p' ~/Dropbox/PERS/todo.txt }
-${alignr}${execi 333 sed -n '5p' ~/Dropbox/PERS/todo.txt }
-${alignr}${execi 333 sed -n '6p' ~/Dropbox/PERS/todo.txt }
-${alignr}${execi 333 sed -n '7p' ~/Dropbox/PERS/todo.txt }
-${alignr}${execi 333 sed -n '8p' ~/Dropbox/PERS/todo.txt }
-${alignr}${execi 333 sed -n '9p' ~/Dropbox/PERS/todo.txt }
-${alignr}${execi 333 sed -n '10p' ~/Dropbox/PERS/todo.txt }
+${alignr}${execi 333 sed -n '1p' ~/Dropbox/DropsyncFiles/todo.txt }
+${alignr}${execi 333 sed -n '2p' ~/Dropbox/DropsyncFiles/todo.txt }
+${alignr}${execi 333 sed -n '3p' ~/Dropbox/DropsyncFiles/todo.txt }
+${alignr}${execi 333 sed -n '4p' ~/Dropbox/DropsyncFiles/todo.txt }
+${alignr}${execi 333 sed -n '5p' ~/Dropbox/DropsyncFiles/todo.txt }
+${alignr}${execi 333 sed -n '6p' ~/Dropbox/DropsyncFiles/todo.txt }
+${alignr}${execi 333 sed -n '7p' ~/Dropbox/DropsyncFiles/todo.txt }
+${alignr}${execi 333 sed -n '8p' ~/Dropbox/DropsyncFiles/todo.txt }
+${alignr}${execi 333 sed -n '9p' ~/Dropbox/DropsyncFiles/todo.txt }
+${alignr}${execi 333 sed -n '10p' ~/Dropbox/DropsyncFiles/todo.txt }
 ${font}
 
 ${voffset -340}
