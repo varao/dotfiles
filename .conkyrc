@@ -96,6 +96,7 @@ ${goto 160}${execi 25  sed -n '7p' ~/.wthr }
 ${font}
 ${voffset -70}
 ${font Inconsolata:size=8} 
+${goto 160}${execi 25 sed -n '9p' ~/.wthr | awk '{print substr($0,55,65)}' }
 ${goto 60}${execi 25 sed -n '10p' ~/.wthr | awk '{print substr($0,4,60)}' }
 ${goto 60}${execi 25 sed -n '11p' ~/.wthr | awk '{print substr($0,4,60)}' }
 ${goto 60}${execi 25 sed -n '12p' ~/.wthr | awk '{print substr($0,4,60)}' } 
