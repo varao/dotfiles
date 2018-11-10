@@ -8,6 +8,7 @@ Plug 'flazz/vim-colorschemes'
 
 Plug 'roxma/nvim-completion-manager'
 Plug 'jalvesaq/Nvim-R', { 'for' : 'r' }
+Plug 'bfredl/nvim-ipy'
 
 Plug 'godlygeek/tabular'
 Plug 'Lokaltog/vim-easymotion'
@@ -15,7 +16,7 @@ Plug 'justinmk/vim-sneak'
 Plug 'haya14busa/incsearch.vim'
 Plug 'haya14busa/incsearch-fuzzy.vim'
 Plug 'sjl/gundo.vim'
-Plug 'vim-syntastic/syntastic'
+"Plug 'vim-syntastic/syntastic'
 
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-dispatch'
@@ -36,7 +37,10 @@ set  hlsearch
 set  expandtab
 set  tabstop=4
 set  shiftwidth=2
-set  nowrap
+set  wrap
+set  lbr
+set  breakindent 
+set  breakindentopt=shift:2
 set  ruler
 set  lazyredraw
 set  mouse=a
@@ -47,6 +51,9 @@ set  relativenumber
 set  number
 set backspace=indent,eol,start
 nmap <CR> i<CR><Esc>
+
+nnoremap E ge
+vnoremap E ge
 
 " Vim loads slowly trying to connct to X
 " To highlight, copy or paste, hold shift down
@@ -69,6 +76,25 @@ nnoremap <C-S-Left> :vertical resize -1<CR>
 nnoremap <C-S-Right> :vertical resize +1<CR>
 nnoremap <C-S-Up> :resize -1<CR>
 nnoremap <C-S-Down> :resize +1<CR>
+
+" mapping to make movements operate on 1 screen line in wrap mode
+function! ScreenMovement(movement)
+   if &wrap
+      return "g" . a:movement
+   else
+      return a:movement
+   endif
+endfunction
+onoremap <silent> <expr> j ScreenMovement("j")
+onoremap <silent> <expr> k ScreenMovement("k")
+onoremap <silent> <expr> 0 ScreenMovement("0")
+onoremap <silent> <expr> ^ ScreenMovement("^")
+onoremap <silent> <expr> $ ScreenMovement("$")
+nnoremap <silent> <expr> j ScreenMovement("j")
+nnoremap <silent> <expr> k ScreenMovement("k")
+nnoremap <silent> <expr> 0 ScreenMovement("0")
+nnoremap <silent> <expr> ^ ScreenMovement("^")
+nnoremap <silent> <expr> $ ScreenMovement("$")
 """"""""""""""""""
 
 " Tabs to splits and back
@@ -207,7 +233,8 @@ endif
 " Show where the next pattern is as you type it:
 set incsearch
 
-" Nfor Nvim-R
+""""""""""""""""""""
+" for Nvim-R
 let R_in_buffer = 0
 let R_applescript = 0
 let R_tmux_split = 0
@@ -215,6 +242,15 @@ let R_tmux_split = 0
 " Press the space bar to send lines and selection to R:
 vmap <Space> <Plug>RDSendSelection
 nmap <Space> <Plug>RDSendLine
+
+""""""""""""""""""""
+" for nvim-ipy
+let g:nvim_ipy_perform_mappings = 0
+
+vmap <Space> <Plug>(IPy-Run)j
+nmap <Space> <Plug>(IPy-Run)j
+nmap <C-Space> <Plug>(IPy-Complete)j
+nmap ? <Plug>(IPy-WordObjInfo)
 
 """"""""""""""""""""
 " For neovim terminal
@@ -268,8 +304,8 @@ nnoremap <silent> <Leader>b :call fzf#run({
 " Gundo
 nnoremap <F6> :GundoToggle<CR>
 set undofile
-set history=100
-set undolevels=100
+set history=1000
+set undolevels=1000
 """""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""""""""
@@ -399,9 +435,9 @@ hi StatusLineNC  ctermfg=4 ctermbg=236 cterm=NONE
 
 let g:vimtex_quickfix_mode=2
 let g:vimtex_latexmk_build_dir = './build'
-let g:latex_view_general_viewer = 'zathura'
+let g:latex_view_general_viewer = 'mupdf'
 let g:vimtex_compiler_progname = 'nvr'
-let g:vimtex_view_method = "zathura"
+let g:vimtex_view_method = "mupdf"
 hi MatchParen ctermbg=239
 let g:vimtex_quickfix_open_on_warning=0
 let g:vimtex_quickfix_blgparser = {'disable':1}
