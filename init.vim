@@ -3,33 +3,33 @@ filetype off
 
 call plug#begin('/home/varao/.local/share/nvim/plugged')
 
-Plug 'lervag/vimtex'
-Plug 'flazz/vim-colorschemes'
+  Plug 'lervag/vimtex'
+  Plug 'flazz/vim-colorschemes'
 
-Plug 'roxma/nvim-completion-manager'
-Plug 'jalvesaq/Nvim-R', { 'for' : 'r' }
-Plug 'bfredl/nvim-ipy'
+  Plug 'roxma/nvim-completion-manager'
+  Plug 'jalvesaq/Nvim-R', { 'for' : 'r' }
+  Plug 'bfredl/nvim-ipy'
 
-Plug 'godlygeek/tabular'
-Plug 'Lokaltog/vim-easymotion'
-Plug 'justinmk/vim-sneak'
-Plug 'haya14busa/incsearch.vim'
-Plug 'haya14busa/incsearch-fuzzy.vim'
-Plug 'sjl/gundo.vim'
-"Plug 'vim-syntastic/syntastic'
+  Plug 'godlygeek/tabular'
+  Plug 'Lokaltog/vim-easymotion'
+  Plug 'justinmk/vim-sneak'
+  Plug 'haya14busa/incsearch.vim'
+  Plug 'haya14busa/incsearch-fuzzy.vim'
+  Plug 'sjl/gundo.vim'
+  "Plug 'vim-syntastic/syntastic'
 
-Plug 'scrooloose/nerdtree'
-Plug 'tpope/vim-dispatch'
-let g:dispatch_quickfix_height=3
+  Plug 'scrooloose/nerdtree'
+  Plug 'tpope/vim-dispatch'
+  let g:dispatch_quickfix_height=3
 
-Plug 'Valloric/YouCompleteMe'
+  Plug 'Valloric/YouCompleteMe'
 
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
+  Plug 'SirVer/ultisnips'
+  Plug 'honza/vim-snippets'
 
-" Need to both install at .fzf and in .vim/bundle
-"Bundle 'junegunn/fzf.vim'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+  " Need to both install at .fzf and in .vim/bundle
+  "Bundle 'junegunn/fzf.vim'
+  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
 call plug#end()
 
@@ -37,6 +37,8 @@ set  hlsearch
 set  expandtab
 set  tabstop=4
 set  shiftwidth=2
+set  laststatus=0
+
 set  wrap
 set  lbr
 set  breakindent 
@@ -51,6 +53,10 @@ set  relativenumber
 set  number
 set backspace=indent,eol,start
 nmap <CR> i<CR><Esc>
+
+" copy and paste to clipboard
+vmap <C-c> "+yi
+vmap <C-x> "+d
 
 nnoremap E ge
 vnoremap E ge
@@ -187,8 +193,9 @@ let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_min_num_identifier_candidate_charsum_identifier_candidate_chars = 5
 
 " NERDTree
-let NERDTreeMapOpenSplit='"'
-let NERDTreeMapOpenVSplit='%'
+let NERDTreeMapOpenSplit='<CR>'
+let NERDTreeMapOpenVSplit='v'
+nnoremap <leader>N :NERDTreeToggle<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""
 " Syntastic
