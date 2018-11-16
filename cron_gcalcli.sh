@@ -8,8 +8,8 @@ else
 fi
 sleep 1
 
-curl -B wttr.in | sed 's/\x1b\[[0-9;]*m//g' > /home/varao/.gcalcli_tmp 
-if test $? -eq 0 
+curl -B wttr.in/laf | sed 's/\x1b\[[0-9;]*m//g' > /home/varao/.gcalcli_tmp 
+if test $? -eq 0 && grep -q Purdue /home/varao/.gcalcli_tmp
 then 
   mv /home/varao/.gcalcli_tmp /home/varao/.wthr 
 else 

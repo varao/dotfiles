@@ -15,8 +15,8 @@ call plug#begin('/home/varao/.local/share/nvim/plugged')
   Plug 'justinmk/vim-sneak'
   Plug 'haya14busa/incsearch.vim'
   Plug 'haya14busa/incsearch-fuzzy.vim'
-  Plug 'sjl/gundo.vim'
   "Plug 'vim-syntastic/syntastic'
+
 
   Plug 'scrooloose/nerdtree'
   Plug 'tpope/vim-dispatch'
@@ -43,6 +43,8 @@ set  wrap
 set  lbr
 set  breakindent 
 set  breakindentopt=shift:2
+"call matchadd('Error', '\(^\)\@<!\s\{2,\}')  " To highlight extra whitespaces vs 'blanks' displayed due to wrapping at words
+
 set  ruler
 set  lazyredraw
 set  mouse=a
@@ -192,11 +194,6 @@ let g:ycm_autoclose_preview_window_after_insertion = 1
 " Don't suggest completions shorter than 5 characters
 let g:ycm_min_num_identifier_candidate_charsum_identifier_candidate_chars = 5
 
-" NERDTree
-let NERDTreeMapOpenSplit='<CR>'
-let NERDTreeMapOpenVSplit='v'
-nnoremap <leader>N :NERDTreeToggle<CR>
-"""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""
 " Syntastic
 let g:syntastic_enable_r_svtools_checker = 1
@@ -306,40 +303,10 @@ nnoremap <silent> <Leader>b :call fzf#run({
 
 """"""""""""""""""""
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""
-" Gundo
-nnoremap <F6> :GundoToggle<CR>
-set undofile
-set history=1000
-set undolevels=1000
-"""""""""""""""""""""""""""""""""""""""""""""""""
-
-"""""""""""""""""""""""""""""""""""""""""""""""""
-" R script settings
-" let maplocalleader = ","
-" vmap <Space> <Plug>RDSendSelection
-" nmap <Space> <Plug>RDSendLine
-" let vimrplugin_applescript=0
-" let vimrplugin_vsplit=1
-" let vimrplugin_assign = 0
-" let g:vimrplugin_insert_mode_cmds = 0
-
-"""""""""""""""""""""""""""""""""""""""""""""""""
-
 """""""""""""""""""""""""""""""""""""""""""""""""
 """   Tabular
-vnoremap <leader>t :Tabular<space>/
+vnoremap <localleader>t :Tabular<space>/
 """""""""""""""""""""""""""""""""""""""""""""""""
-
-"""""""""""""""""""""""""""""""""""""""""""""""""
-"""   Ignore
-"""""""""""""""""""""""""""""""""""""""""""""""""
-"Set line numbering to take up 5 spaces
-"set numberwidth=5 
-
-"Highlight current line
-"set cursorline
 
 "Turn on spell checking with English dictionary
 "set spell
@@ -357,36 +324,15 @@ else
     inoremap <Nul> <C-x><C-o><C-p>
 endif
 
-"By default vim organizes undo into actions (e.g. entering and
-"leaving insert mode). The options below break this up, and add
-"entered text into the undo tree whenever you hit space, tab or return
-inoremap <Space> <Space><C-g>u
-"inoremap <Return> <Return><C-g>u  " This messes up vimtex autocomplete
-inoremap <Tab> <Tab><C-g>u
-
 " Force Vim to use 256 colors if running in a capable terminal emulator:
 if &term =~ "xterm" || &term =~ "256" || $DISPLAY != "" || $HAS_256_COLORS == "yes"
     set t_Co=256
 endif
 
-" There are hundreds of color schemes for Vim on the internet, but you can
-" start with color schemes already installed.
-" Click on GVim menu bar "Edit / Color scheme" to know the name of your
-" preferred color scheme, then, remove the double quote (which is a comment
-" character, like the # is for R language) and replace the value "not_defined"
-" below:
-"colorscheme not_defined
-"
-   let g:solarized_termcolors=256
-
-"   set background=light
-"   let g:solarized_visibility = "high"
-"   let g:solarized_contrast = "high"
-"   se t_Co=256
+" Inherit the colorscheme from the terminal 
+let g:solarized_termcolors=256
 
 autocmd ColorScheme * hi Sneak guifg=black guibg=red ctermfg=black ctermbg=red
-
-"colorscheme pyte
 
 hi Search ctermfg=Black ctermbg=DarkGrey
 hi Visual ctermbg=Black
@@ -436,6 +382,13 @@ let g:fzf_layout = { 'down': '~40%' }
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 nnoremap <c-p> :FZF<cr>
 nnoremap <c-a> :FZF ~<cr>
+nnoremap <localleader>n :FZF<cr>
+nnoremap <localleader>~ :FZF ~<cr>
+" NERDTree
+let NERDTreeMapOpenSplit='<CR>'
+let NERDTreeMapOpenVSplit='v'
+nnoremap <localleader>N :NERDTreeToggle<CR>
+"""""""""""""""""""""""""""""""""""""""""""""""""
 
 hi StatusLine  ctermfg=31 ctermbg=232 cterm=NONE
 hi StatusLineNC  ctermfg=4 ctermbg=236 cterm=NONE
@@ -456,7 +409,6 @@ nnoremap <localleader>lw :let g:vimtex_quickfix_open_on_warning = !g:vimtex_quic
 
 " Navigate quickfix
 map <C-j> :cn<CR>
-" map <C-k> :cp<CR> Never use this and have now remapped <C-k>
 au FileType qf call AdjustWindowHeight(3, 10)
 function! AdjustWindowHeight(minheight, maxheight)
   exe max([min([line("$"), a:maxheight]), a:minheight]) . "wincmd _"
@@ -465,12 +417,10 @@ endfunction
 highlight Pmenu ctermbg=238 ctermfg=202 gui=bold
 highlight PmenuSel  ctermbg=240 ctermfg=202 gui=bold
 
-"autocmd BufEnter * call system("tmux rename-window " . expand("%:t"). '\ ['. expand(v:servername).']')
-" autocmd VimLeave * call system("tmux rename-window bash")
-" autocmd BufEnter * let &titlestring = ' ' . expand("%:t")                                                                 
-" set title
 
-
+""""""""""""""""""""""""""""""""""""""""""""
+" Shortcuts for easy navigation
+"
 map <Leader> <Plug>(easymotion-prefix)
 map <leader><leader>w <Plug>(easymotion-bd-w)
 map <leader><leader>e <Plug>(easymotion-bd-e)
@@ -488,6 +438,8 @@ hi EasyMotionTarget2Second ctermbg=none ctermfg=lightred
 map f <Plug>Sneak_f
 nmap <Tab> <Plug>SneakNext
 nmap <Backspace> <Plug>SneakPrevious
+"
+""""""""""""""""""""""""""""""""""""""""""""
 
 " Vinayak (Rhistory)
 inoremap <expr> <c-k> fzf#complete({

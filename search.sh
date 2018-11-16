@@ -37,4 +37,6 @@ done
 '
 # spwn_cmd used to be:
 #   spwn_cmd="AFTER_FZF=\"nvim $f_fzf ; exit\" gnome-terminal " 
+    
+#   spwn_cmd="nohup qpdfview --unique $f_fzf &> /dev/null &"
 # and .bash_rc used to have eval $AFTER_FZF at the end    
