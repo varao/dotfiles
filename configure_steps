@@ -1,0 +1,23 @@
+Install xmonad:
+  1) Install ghc
+  2) Install haskell-platform
+  3) Install xmonad (all via apt-get) 
+  4) Install Gnome+Xmonad from https://github.com/Gekkio/gnome-session-xmonad
+  5) Install dbus 0.10
+  6) Install xmonad-log-applet (one of the forks eg https://github.com/fabiodl/xmonad-log-applet)
+  7) Reboot
+
+install neovim
+install dircolors from git/dotfiles
+copy dotfiles
+
+for .tmux.conf, first install powerline (via pip) and then install powerline 
+patched fonts: https://github.com/powerline/fonts
+
+Run :PlugInstall in nvim (compiled with python)
+
+To set touchpad, see:
+http://en.community.dell.com/techcenter/os-applications/f/4613/t/19992924
+For gestures, use libinput-gestures
+
+Add mystart.sh to gnome starting-applications
