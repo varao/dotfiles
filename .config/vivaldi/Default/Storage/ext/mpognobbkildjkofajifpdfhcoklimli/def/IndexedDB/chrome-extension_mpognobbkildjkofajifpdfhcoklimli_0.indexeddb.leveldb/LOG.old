@@ -1,0 +1,33 @@
+2018/11/19-10:31:12.128 2925 Reusing MANIFEST /home/varao/.config/vivaldi/Default/Storage/ext/mpognobbkildjkofajifpdfhcoklimli/def/IndexedDB/chrome-extension_mpognobbkildjkofajifpdfhcoklimli_0.indexeddb.leveldb/MANIFEST-000001
+2018/11/19-10:31:12.128 2925 Recovering log #350
+2018/11/19-10:31:12.128 2925 Reusing old log /home/varao/.config/vivaldi/Default/Storage/ext/mpognobbkildjkofajifpdfhcoklimli/def/IndexedDB/chrome-extension_mpognobbkildjkofajifpdfhcoklimli_0.indexeddb.leveldb/000350.log 
+2018/11/19-10:31:12.137 2922 Current memtable full; waiting...
+2018/11/19-10:31:12.137 3170 Level-0 table #355: started
+2018/11/19-10:31:12.138 3170 Level-0 table #355: 421 bytes OK
+2018/11/19-10:31:12.139 3170 Delete type=0 #350
+2018/11/19-10:31:12.139 3170 Level-0 table #357: started
+2018/11/19-10:31:12.139 3170 Level-0 table #357: 0 bytes OK
+2018/11/19-10:31:12.140 3170 Delete type=0 #354
+2018/11/19-10:31:12.140 3170 Manual compaction at level-0 from '\x00C\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00D\x00\x00\x00' @ 0 : 0; will stop at '\x00C\x00\x00\x05' @ 2512 : 1
+2018/11/19-10:31:12.140 3170 Compacting 1@0 + 1@1 files
+2018/11/19-10:31:12.141 3170 Generated table #358@0: 169 keys, 2553 bytes
+2018/11/19-10:31:12.141 3170 Compacted 1@0 + 1@1 files => 2553 bytes
+2018/11/19-10:31:12.142 3170 compacted to: files[ 0 1 1 0 0 0 0 ]
+2018/11/19-10:31:12.142 3170 Delete type=2 #355
+2018/11/19-10:31:12.142 3170 Delete type=2 #352
+2018/11/19-10:31:12.142 3170 Manual compaction at level-0 from '\x00C\x00\x00\x05' @ 2512 : 1 .. '\x00D\x00\x00\x00' @ 0 : 0; will stop at (end)
+2018/11/19-10:31:12.186 2918 Current memtable full; waiting...
+2018/11/19-10:31:12.186 3170 Level-0 table #360: started
+2018/11/19-10:31:12.187 3170 Level-0 table #360: 1035 bytes OK
+2018/11/19-10:31:12.189 3170 Delete type=0 #356
+2018/11/19-10:31:12.189 3170 Level-0 table #362: started
+2018/11/19-10:31:12.189 3170 Level-0 table #362: 0 bytes OK
+2018/11/19-10:31:12.190 3170 Delete type=0 #359
+2018/11/19-10:31:12.190 3170 Manual compaction at level-0 from '\x00D\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00E\x00\x00\x00' @ 0 : 0; will stop at '\x00D\x00\x00\xc8\x10\x00t\x00r\x00u\x00s\x00t\x00e\x00d\x00A\x00d\x00d\x00r\x00e\x00s\x00s\x00e\x00s' @ 2548 : 1
+2018/11/19-10:31:12.190 3170 Compacting 1@0 + 1@1 files
+2018/11/19-10:31:12.191 3170 Generated table #363@0: 171 keys, 2668 bytes
+2018/11/19-10:31:12.191 3170 Compacted 1@0 + 1@1 files => 2668 bytes
+2018/11/19-10:31:12.192 3170 compacted to: files[ 0 1 1 0 0 0 0 ]
+2018/11/19-10:31:12.192 3170 Delete type=2 #360
+2018/11/19-10:31:12.192 3170 Delete type=2 #358
+2018/11/19-10:31:12.192 3170 Manual compaction at level-0 from '\x00D\x00\x00\xc8\x10\x00t\x00r\x00u\x00s\x00t\x00e\x00d\x00A\x00d\x00d\x00r\x00e\x00s\x00s\x00e\x00s' @ 2548 : 1 .. '\x00E\x00\x00\x00' @ 0 : 0; will stop at (end)

@@ -1,0 +1,6 @@
+2018/11/12-22:22:26.628 31944 Reusing MANIFEST /home/varao/.config/vivaldi/Default/IndexedDB/https_www.netflix.com_0.indexeddb.leveldb/MANIFEST-000001
+2018/11/12-22:22:26.628 31944 Recovering log #7
+2018/11/12-22:22:26.641 31944 Reusing old log /home/varao/.config/vivaldi/Default/IndexedDB/https_www.netflix.com_0.indexeddb.leveldb/000007.log 
+2018/11/12-22:53:01.929 17579 Level-0 table #11: started
+2018/11/12-22:53:01.971 17579 Level-0 table #11: 2049992 bytes OK
+2018/11/12-22:53:01.976 17579 Delete type=0 #7

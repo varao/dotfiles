@@ -1,0 +1,24 @@
+{
+   "background": {
+      "page": "pdfHandler.html"
+   },
+   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+   "description": "Fast & reliable PDF viewer, editor, and annotation tool.",
+   "homepage_url": "https://www.xodo.com",
+   "icons": {
+      "128": "xodo128.png",
+      "16": "xodo16.png",
+      "48": "xodo48.png"
+   },
+   "incognito": "split",
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoYigopXoHUsB8R7o2OFDZ2rDHZ8dlo3YnABJZhlwBzUcMzeqW+AQ3AM0Jdmsndchoru3N+EMoQC19VxO4zAW7/1eoqtQfirl+PnezUMjXGwpvWjmsLdwb1uAYOrxGUwaFfYRhvuhOZpO2WYXT2AJAFwa9z0gWpCfq7eBN7QneNlLdcmGeve9hlGSdeuq4QhBU4QLLYecC/DAaphY5/wuohlDdTd+qk2sJr/JVus9pVUmmAlPsO3RXpRtmp3D1drklHrZSIbltGb5NeeUypE+zHlmkcKn0JD7AvZwTtzqLlplSx9hv1YL+53ms3dd7slYB2D2lkrrA67po6YBP/xIGwIDAQAB",
+   "manifest_version": 2,
+   "minimum_chrome_version": "37",
+   "name": "Xodo PDF Viewer & Editor",
+   "offline_enabled": true,
+   "permissions": [ "webRequest", "webRequestBlocking", "\u003Call_urls>", "tabs", "webNavigation", "identity", "contextMenus", "storage" ],
+   "short_name": "Xodo PDF",
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "1.1.5",
+   "web_accessible_resources": [ "getFrameId", "viewer.html", "http:/*", "https:/*", "ftp:/*", "file:/*", "viewer.html#d=file:/*", "chrome-extension:/*", "filesystem:/*", "drive:*", "lib/html5/ReaderControl.html" ]
+}
