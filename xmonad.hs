@@ -44,7 +44,7 @@ isSuffixOfQ :: String -> Query String -> Query Bool
 isSuffixOfQ = fmap . isSuffixOf
 pName = stringProperty "WM_NAME"
 
-base00  = "#657b83"
+base00  = "#656565"
 yellow  = "#b58900"
 red     = "#dc322f"
 blue    = "#268bd2"
@@ -71,7 +71,7 @@ topBarTheme = def
     , activeTextColor       = blue
     , urgentBorderColor     = red
     , urgentTextColor       = yellow
-    , decoHeight            = 4
+    , decoHeight            = 6
 }
 
 ---------------------------------
@@ -131,7 +131,7 @@ myLayout = fixFocus $ avoidStruts  -- Makes gnome panel visible
                    -- |||spiral (6/7) ||| Mirror(rt) 
 
 -- width of border around windows
-myBorderWidth = 1
+myBorderWidth = 0
 
 -- color of focused/inactive border
 myFocusedBorderColor = "#0066aa"
@@ -140,7 +140,7 @@ myNormalBorderColor = "#222222"
 
 myStartupHook     = do
   startupHook gnomeConfig
-  spawn "xcompmgr -c -t-9 -l-11 -r1 -o.05 -D0 &" -- for transparencies (add -fF for fade effects)
+  spawn "xcompmgr -c -t-9 -l-11 -r1 -o.0 -D0 &" -- for transparencies (add -fF -o.05 for fade effects)
  -- setWMName "HM"
  
 myManageHook = composeAll
@@ -196,10 +196,10 @@ myKeys =
     , ((myModMask                , xK_p), spawn myLauncher)
 --    , ((myModMask                , xK_f), spawn myFzf)
     , ((myModMask                , xK_f), scratchFzf)
-    , ((myModMask                , xK_z), scratchFfx)
-    , ((myModMask .|. shiftMask  , xK_z), scratchZthr)
-    , ((myModMask                , xK_x), scratchBrave)
-    , ((myModMask .|. shiftMask  , xK_x), scratchFfxp)
+    , ((myModMask                , xK_z), scratchZthr)
+--    , ((myModMask .|. shiftMask  , xK_z), scratchZthr)
+    , ((myModMask                , xK_x), scratchViv)
+    , ((myModMask .|. shiftMask  , xK_x), scratchBrave)
     , ((myModMask .|. controlMask, xK_x), scratchChrm)
     , ((myModMask                , xK_r), scratchRemm)
     , ((myModMask                , xK_y), scratchSkype)
@@ -214,6 +214,8 @@ myKeys =
     scratchFfxp  = namedScratchpadAction myScratchPads "firefox-p"
     scratchBrave = namedScratchpadAction myScratchPads "brave-p"
     scratchFfx   = namedScratchpadAction myScratchPads "firefox"
+    scratchViv   = namedScratchpadAction myScratchPads "vivaldi"
+    scratchPm   = namedScratchpadAction myScratchPads "palemoon"
     scratchChrm  = namedScratchpadAction myScratchPads "chromium"
     scratchRemm  = namedScratchpadAction myScratchPads "remmina"
     scratchSkype = namedScratchpadAction myScratchPads "skype"
@@ -221,8 +223,10 @@ myKeys =
 
 myScratchPads = [  NS "fuzzyfind"  myFzf  findFZ  (customFloating $ W.RationalRect (1/8) (1/6) (1/3) (2/3))  -- one scratchpad
                  , NS "brave-p"  "brave-browser --incognito" findBravep nonFloating  -- one scratchpad
-                 , NS "firefox-p"  "firefox -private-window" findFfxp nonFloating  -- one scratchpad
+--               , NS "firefox-p"  "firefox -private-window" findFfxp nonFloating  -- one scratchpad
+                 , NS "palemoon"  "palemoon" findPm nonFloating  -- one scratchpad
                  , NS "chromium"   "chromium-browser" findChrm nonFloating  -- one scratchpad
+                 , NS "vivaldi"   "vivaldi-stable -incognito" findViv nonFloating  -- one scratchpad
                  , NS "firefox"   "firefox" findFfx nonFloating  -- one scratchpad
 --                 , NS "wmail"   "~/git/INSTALL/WMail-linux-x64/WMail" findWmail nonFloating  -- one scratchpad
 --                 , NS "pdfviewer"    "zathura-tabbed" findPdf nonFloating  -- one scratchpad
@@ -234,10 +238,12 @@ myScratchPads = [  NS "fuzzyfind"  myFzf  findFZ  (customFloating $ W.RationalRe
    findFZ     = resource  =? "fzf_term"  
 --   findPdf  = className =? "tabbed"  
    findPdf    = className =? "qpdfview"  
-   findFfxp = className =? "Firefox" <&&> ("Mozilla Firefox (Private Browsing)" `isSuffixOfQ` pName)
+   findFfxp = className   =? "Firefox" <&&> ("Mozilla Firefox (Private Browsing)" `isSuffixOfQ` pName)
+   findPm     = className =? "Pale moon"
    findBravep = className =? "Brave-browser"
    findFfx    = className =? "Firefox" <&&> ("Mozilla Firefox" `isSuffixOfQ` pName)  
    findChrm   = className =? "Chromium-browser"  
+   findViv    = className =? "Vivaldi-stable"
    findRemm   = className =? "Remmina"  
    findSkype  = className =? "Skype"  
 --   findWmail = className =? "wmail"  

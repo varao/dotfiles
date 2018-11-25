@@ -7,10 +7,14 @@ xkb_symbols "basic" {
 
     key <CAPS> { [ ISO_Level3_Shift            ] };
     # Add vim cursor keys to be accessed with AltGr
-    key <AC06> { [ h, H , Left, Left           ] };
-    key <AC07> { [ j, J, Down, Down            ] };
-    key <AC08> { [ k, K, Up, Up                ] };
-    key <AC09> { [ l, L, Right, Right          ] };
+    key <AC06> {    [     h,   H,   Left,  Left    ] };
+    key <AC07> {    [     j,   J,   Down,  Down    ] };
+    key <AC08> {    [     k,   K,   Up,    Up      ] };
+    key <AC09> {    [     l,   L,   Right, Right   ] };
+    key <AD07> {    [     u,   U,   Next,  Next    ] };
+    key <AD08> {    [     i,   I,   Prior, Prior   ] };
+    key <AB06> {	[	  n,   N,   End,   End     ] };
+    key <AB07> {	[	  m,   M,   Home,  Home    ] };
 
     key <TLDE> {	[     grave,	asciitilde	]	};
     key <AE01> {	[	  1,	exclam 		]	};
