@@ -11,10 +11,12 @@ xkb_symbols "basic" {
     key <AC07> {    [     j,   J,   Down,  Down    ] };
     key <AC08> {    [     k,   K,   Up,    Up      ] };
     key <AC09> {    [     l,   L,   Right, Right   ] };
-    key <AD07> {    [     u,   U,   Next,  Next    ] };
-    key <AD08> {    [     i,   I,   Prior, Prior   ] };
-    key <AB06> {	[	  n,   N,   End,   End     ] };
-    key <AB07> {	[	  m,   M,   Home,  Home    ] };
+    key <AD07> {    [     u,   U,   Prior, Prior   ] };
+    key <AD08> {    [     i,   I,   Next,  Next    ] };
+    key <AB06> {	[	  n,   N,   Home,  Home    ] };
+    key <AB07> {	[	  m,   M,   End,   End     ] };
+    key <AC10> {	[ semicolon, colon, BackSpace, BackSpace] };
+    key <AC11> {	[ apostrophe, quotedbl, Delete, Delete] };
 
     key <TLDE> {	[     grave,	asciitilde	]	};
     key <AE01> {	[	  1,	exclam 		]	};
