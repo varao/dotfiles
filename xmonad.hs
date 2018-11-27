@@ -196,7 +196,8 @@ myKeys =
     , ((myModMask                , xK_p), spawn myLauncher)
 --    , ((myModMask                , xK_f), spawn myFzf)
     , ((myModMask                , xK_f), scratchFzf)
-    , ((myModMask                , xK_z), scratchZthr)
+    , ((myModMask                , xK_z), scratchQpdf)
+    , ((myModMask .|. shiftMask  , xK_z), scratchZthr)
 --    , ((myModMask .|. shiftMask  , xK_z), scratchZthr)
     , ((myModMask                , xK_x), scratchViv)
     , ((myModMask .|. shiftMask  , xK_x), scratchBrave)
@@ -210,7 +211,8 @@ myKeys =
     -- this simply means "find the scratchpad in myScratchPads that is 
     -- named fuzzyfind and launch it"
     scratchFzf   = namedScratchpadAction myScratchPads "fuzzyfind"
-    scratchZthr  = namedScratchpadAction myScratchPads "pdfviewer"
+    scratchQpdf  = namedScratchpadAction myScratchPads "pdfviewer"
+    scratchZthr  = namedScratchpadAction myScratchPads "zathura"
     scratchFfxp  = namedScratchpadAction myScratchPads "firefox-p"
     scratchBrave = namedScratchpadAction myScratchPads "brave-p"
     scratchFfx   = namedScratchpadAction myScratchPads "firefox"
@@ -229,14 +231,14 @@ myScratchPads = [  NS "fuzzyfind"  myFzf  findFZ  (customFloating $ W.RationalRe
                  , NS "vivaldi"   "vivaldi-stable -incognito" findViv nonFloating  -- one scratchpad
                  , NS "firefox"   "firefox" findFfx nonFloating  -- one scratchpad
 --                 , NS "wmail"   "~/git/INSTALL/WMail-linux-x64/WMail" findWmail nonFloating  -- one scratchpad
---                 , NS "pdfviewer"    "zathura-tabbed" findPdf nonFloating  -- one scratchpad
+                 , NS "zathura"    "zathura-tabbed" findZthr nonFloating  -- one scratchpad
                  , NS "pdfviewer"    "qpdfview --unique" findPdf nonFloating  -- one scratchpad
                  , NS "remmina"    "remmina" findRemm nonFloating  -- one scratchpad
                  , NS "skype"    "skypeforlinux" findSkype nonFloating -- one scratchpad
                 ]
   where
    findFZ     = resource  =? "fzf_term"  
---   findPdf  = className =? "tabbed"  
+   findZthr   = className =? "tabbed"  
    findPdf    = className =? "qpdfview"  
    findFfxp = className   =? "Firefox" <&&> ("Mozilla Firefox (Private Browsing)" `isSuffixOfQ` pName)
    findPm     = className =? "Pale moon"
