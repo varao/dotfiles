@@ -7,7 +7,7 @@ function run_sel() {
   if [ -z "${f_fzf// }" ]; then 
     spwn_cmd="" 
   elif [ -d "$f_fzf" ]; then 
-    spwn_cmd="gnome-terminal "
+    spwn_cmd="gnome-terminal --working-directory $f_fzf"
   elif [ ${f_fzf: -4} == ".pdf" ]; then
     spwn_cmd="nohup qpdfview --unique $f_fzf &> /dev/null &"
   elif [ ${f_fzf: -5} == ".html" ]; then
