@@ -8,8 +8,8 @@ xkb_symbols "basic" {
     key <CAPS> { [ ISO_Level3_Shift            ] };
 
     # Map Windows and Control left keys to Control left
-    key <LWIN> { [ Control_L       ]   };
-    modifier_map Control { <LWIN>, <LCTL> };
+    # key <LWIN> { [ Control_L       ]   };
+    # modifier_map Control { <LWIN>, <LCTL> };
 
     # Add vim cursor keys to be accessed with AltGr
     key <AC06> {    [     h,   H,   Left,  Left    ] };

@@ -36,9 +36,9 @@ import Data.List (isSuffixOf)
 import Data.Maybe (fromJust)
 import XMonad.Layout.LayoutModifier
 
-import qualified "dbus" DBus as D
-import qualified "dbus" DBus.Client as D
-import qualified Codec.Binary.UTF8.String as UTF8
+import System.IO
+import XMonad.Util.Run
+
 
 isSuffixOfQ :: String -> Query String -> Query Bool
 isSuffixOfQ = fmap . isSuffixOf
@@ -108,7 +108,7 @@ data EmptyLayout a = EmptyLayout deriving (Show, Read)
 
 instance LayoutClass EmptyLayout a where
     doLayout a b _ = emptyLayout a b
-    description _ = "*"
+    description _ = "[*]"
 
 data HIDE = HIDE deriving (Read, Show, Eq, Typeable)
 instance Transformer HIDE Window where
@@ -204,6 +204,7 @@ myKeys =
     , ((myModMask .|. controlMask, xK_x), scratchChrm)
     , ((myModMask                , xK_r), scratchRemm)
     , ((myModMask                , xK_y), scratchSkype)
+    , ((myModMask                , xK_b), sendMessage ToggleStruts)
 --    , ((myModMask .|. shiftMask  , xK_x), scratchWmail)
 -- also gone: xK_b, xK_w, xK_e
   ]
@@ -270,15 +271,42 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 myLauncher = "$(/home/varao/.cabal/bin/yeganesh -x -- -fn '-*-terminus-*-r-normal-*-*-120-*-*-*-*-iso8859-*')"
 myFzf = "$(/home/varao/git/dotfiles/search.sh )"
 
+-- Stolen from
+-- https://wiki.haskell.org/Xmonad/Config_archive/rtalreja's_xmonad.hs
+-- https://www.snip2code.com/Snippet/1092870/Xmonad-hs-works-with-lemonbar(-xft-slant/
+myLogHook h = dynamicLogWithPP $ defaultPP
+    {
+        ppCurrent           =   wrap "%{F#ebac54}" "%{F#1B1D1E}" . pad 
+      , ppVisible           =   wrap "%{F#FFFFFF}" "%{F#1B1D1E}" . pad 
+      , ppHidden            =   wrap "%{F#888888}" "%{F#1B1D1E}" . pad 
+ --     , ppHiddenNoWindows   =   dzenColor "#7b7b7b" "#1B1D1E" . pad
+ --     , ppUrgent            =   dzenColor "#ff0000" "#1B1D1E" . pad
+      , ppWsSep             =   ""
+      , ppSep               =   " " -- " |  "
+      , ppLayout            =  wrap "%{F#ebac54}" "%{F#1B1D1E}" . 
+                                (\x -> case x of
+                                    "NoFrillsDeco Tabbed ResizableTall"             ->      "[+]"
+                                    "NoFrillsDeco Tabbed Mirror ResizableTall"      ->      "[-]"
+                                    "Tabbed Full"      ->      "[F]"
+                                    "Simple Float"              ->      "~"
+                                    _                           ->      x
+                                )
+      , ppTitle             =   (" " ++) . wrap "%{F#CCCCCC}" "%{F#1B1D1E}" . dzenEscape
+      , ppOutput            =   hPutStrLn h . wrap " " ""
+    }
+
+--myXmonadBar = "dzen2 -x '300' -y '0' -h '24' -w '800' -ta 'l' -fg '#FFFFFF' -bg '#1B1D1E' -fn '-misc-fixed-medium-r-normal--15-140-75-75-c-90-koi8-r'"
+-- installed fork from https://github.com/krypt-n/bar for better font support
+myXmonadBar = "/home/varao/git/lemonbar/lemonbar -g 800x24+300+0 -F '#FFFFFF' -B '#1B1D1E' -f 'roboto'"
+myStatusBar = "conky | dzen2 -x '1100' -w '40' -h '24' -ta 'r' -bg '#1B1D1E' -fg '#FFFFFF' -y '0'"
 
 main :: IO ()
 main = do
-    dbus <- D.connectSession
-    getWellKnownName dbus
+    dzenLeftBar <- spawnPipe myXmonadBar
+    dzenRightBar <- spawnPipe myStatusBar
     xmonad $ gnomeConfig
          { 
-           logHook = dynamicLogWithPP (prettyPrinter dbus)
-                      >> updatePointer (0.25, 0.25) (0.25, 0.25) -- near the top-left
+             logHook             = myLogHook dzenLeftBar  -- >> fadeInactiveLogHook 0xdddddddd
            , layoutHook         = smartBorders $ myLayout
            , borderWidth        = myBorderWidth
 --           , focusFollowsMouse  = False
@@ -293,52 +321,3 @@ main = do
 --           , modMask = mod4Mask  -- Temp fix to make windows key the modifier if I really need Alt
          } `additionalKeys` myKeys
 
-prettyPrinter :: D.Client -> PP
-prettyPrinter dbus =  namedScratchpadFilterOutWorkspacePP $ defaultPP
-    { ppOutput   = dbusOutput dbus
-    , ppLayout   = pangoColor "orange" . myLayoutPrinter
-    , ppTitle    = pangoColor "skyblue" . pangoSanitize  . shorten 100
-    , ppCurrent  = pangoColor "#00aacc" . wrap "[" "*]" . pangoSanitize
-    , ppVisible  = pangoColor "#00aacc" . wrap "[" "]" . pangoSanitize
-    , ppHidden   = pangoColor "grey70" . wrap "[" "]" . pangoSanitize
-    , ppUrgent   = pangoColor "red"
-    , ppSep      = " "
---    , ppExtras   = [logCmd "date"]
---    , ppExtras   = [pangoColor "skyblue" `onLogger` lTitle]
-    }
-    where
-       --lTitle = fixedWidthL AlignRight " " 199 . shortenL 80 $ logCmd "dropbox status"
-
-getWellKnownName :: D.Client -> IO ()
-getWellKnownName dbus = do
-  D.requestName dbus (D.busName_ "org.xmonad.Log")
-                [D.nameAllowReplacement, D.nameReplaceExisting, D.nameDoNotQueue]
-  return ()
-  
-dbusOutput :: D.Client -> String -> IO ()
-dbusOutput dbus str = do
-    let signal = (D.signal "/org/xmonad/Log" "org.xmonad.Log" "Update") {
-            D.signalBody = [D.toVariant ("<b>" ++ (UTF8.decodeString str) ++ "</b>")]
-        }
-    D.emit dbus signal
-
-pangoColor :: String -> String -> String
-pangoColor fg = wrap left right
-  where
-    left  = "<span foreground=\"" ++ fg ++ "\">"
-    right = "</span>"
-
-pangoSanitize :: String -> String
-pangoSanitize = foldr sanitize ""
-  where
-    sanitize '>'  xs = "&gt;" ++ xs
-    sanitize '<'  xs = "&lt;" ++ xs
-    sanitize '\"' xs = "&quot;" ++ xs
-    sanitize '&'  xs = "&amp;" ++ xs
-    sanitize x    xs = x:xs
-
-myLayoutPrinter :: String -> String
-myLayoutPrinter "Tabbed Full" = "F"
-myLayoutPrinter "NoFrillsDeco Tabbed ResizableTall" = "|"
-myLayoutPrinter "NoFrillsDeco Tabbed Mirror ResizableTall" = "-"
-myLayoutPrinter x = x

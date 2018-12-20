@@ -4,8 +4,9 @@ Install xmonad:
   3) Install xmonad (all via apt-get) 
   4) Install Gnome+Xmonad from https://github.com/Gekkio/gnome-session-xmonad
   5) Install dbus 0.10 (now 1.2 via cabal?) 
-  6) Install xmonad-log-applet (one of the forks eg https://github.com/fabiodl/xmonad-log-applet)
-          Here, first run ./autogen.sh --with-panel=gnomeflashback
+  6) Install lemonbar fork (https://github.com/krypt-n/bar) (the fork has better font support than lemonbar) and ignore xmonad-log-applet https://github.com/krypt-n/bar
+  --6) Install xmonad-log-applet (one of the forks eg https://github.com/fabiodl/xmonad-log-applet)
+  --        Here, first run ./autogen.sh --with-panel=gnomeflashback
   7) Reboot
 
 install neovim
