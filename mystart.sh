@@ -6,6 +6,7 @@
 
 xcape -e "Shift_R=Escape" #;Hyper_L=Tab"
 
-sleep 1 && conky -x 500; sleep 1 && conky -x 2500
+# Moved this to xmonad.hs
+# sleep 1 && conky -x 500; sleep 1 && conky -x 2500
 
 

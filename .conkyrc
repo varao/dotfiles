@@ -86,7 +86,7 @@ conky.text = [[
 ${voffset 150}$hr
 ${voffset -10}${font Fira Sans :size=45}${time %R}${font}${voffset -5}
 ${voffset 2}${font Fira Sans Light:size=15} ${time %a }${time %b} ${time %e}${font}
-${voffset -145}
+${voffset -160}
 ${font Inconsolata:size=12} 
 ${goto 160}${execi 25  sed -n '3p' ~/.wthr }
 ${goto 160}${execi 25  sed -n '4p' ~/.wthr }
@@ -97,6 +97,7 @@ ${font}
 ${voffset -70}
 ${font Inconsolata:size=8} 
 ${goto 160}${execi 25 sed -n '9p' ~/.wthr | awk '{print substr($0,55,65)}' }
+${voffset -22}
 ${goto 60}${execi 25 sed -n '10p' ~/.wthr | awk '{print substr($0,4,60)}' }
 ${goto 60}${execi 25 sed -n '11p' ~/.wthr | awk '{print substr($0,4,60)}' }
 ${goto 60}${execi 25 sed -n '12p' ~/.wthr | awk '{print substr($0,4,60)}' } 
@@ -115,7 +116,7 @@ ${goto 60}${execi 25 sed -n '15p' ~/.wthr | awk '{print substr($0,66,130)}' }
 ${goto 60}${execi 25 sed -n '16p' ~/.wthr | awk '{print substr($0,66,130)}' }
 ${goto 60}${execi 25 sed -n '17p' ~/.wthr | awk '{print substr($0,66,130)}' }
 ${font}
-${voffset -380}
+${voffset -415}
 ${font size=15}
 ${goto 400}${voffset 3}Wifi ${alignr}${wireless_essid}${voffset -5}
  ${goto 400}${voffset 9} ${alignr}${wireless_bitrate wlp58s0} (${wireless_link_qual_perc wlp58s0}%)   ${color AEA79F}${wireless_link_bar 6,50 wlp58s0}${color DAD7D3}
@@ -134,7 +135,7 @@ ${voffset -50}${font Inconsolata:size=13}
 ${font}
 
 
-${voffset -90}
+${voffset -130}
 $hr
 ${voffset -50}
 ${font Inconsolata:size=14}
@@ -150,7 +151,7 @@ ${alignr}${execi 333 sed -n '9p' ~/Dropbox/DropsyncFiles/todo.txt }
 ${alignr}${execi 333 sed -n '10p' ~/Dropbox/DropsyncFiles/todo.txt }
 ${font}
 
-${voffset -340}
+${voffset -360}
 ${font Inconsolata:size=14}
 ${execi 3 cat ~/.gcalcli | cut -c-45 }
 ${font}
