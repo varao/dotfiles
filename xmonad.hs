@@ -298,15 +298,17 @@ myLogHook h = dynamicLogWithPP $ defaultPP
 --myXmonadBar = "dzen2 -x '300' -y '0' -h '24' -w '800' -ta 'l' -fg '#FFFFFF' -bg '#1B1D1E' -fn '-misc-fixed-medium-r-normal--15-140-75-75-c-90-koi8-r'"
 -- installed fork from https://github.com/krypt-n/bar for better font support
 myXmonadBar = "/home/varao/git/lemonbar/lemonbar -g 800x24+300+0 -F '#FFFFFF' -B '#1B1D1E' -f 'roboto'"
-myStatusBar = "conky -c /home/varao/git/dotfiles/.conkyrc -x 500; conky -c /home/varao/git/dotfiles/.conkyrc -x 2500 " -- | dzen2 -x '1100' -w '40' -h '24' -ta 'r' -bg '#1B1D1E' -fg '#FFFFFF' -y '0'"
+myXmonadBar2 = "/home/varao/git/lemonbar/lemonbar -g x24+1920+0 -F '#FFFFFF' -B '#1B1D1E' -f 'roboto'"
+myStatusBar = "conky -c /home/varao/git/dotfiles/.conkyrc -x 1000; conky -c /home/varao/git/dotfiles/.conkyrc -x 2900 " -- | dzen2 -x '1100' -w '40' -h '24' -ta 'r' -bg '#1B1D1E' -fg '#FFFFFF' -y '0'"
 
 main :: IO ()
 main = do
-    dzenLeftBar <- spawnPipe myXmonadBar
+    dzenLeftBar  <- spawnPipe myXmonadBar 
+    dzenLeftBar2 <- spawnPipe myXmonadBar2
     dzenRightBar <- spawnPipe myStatusBar
     xmonad $ gnomeConfig
          { 
-             logHook             = myLogHook dzenLeftBar  -- >> fadeInactiveLogHook 0xdddddddd
+             logHook             = myLogHook dzenLeftBar >> myLogHook dzenLeftBar2 >> updatePointer (0.25, 0.25) (0.25, 0.25)
            , layoutHook         = smartBorders $ myLayout
            , borderWidth        = myBorderWidth
 --           , focusFollowsMouse  = False

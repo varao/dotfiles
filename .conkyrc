@@ -95,41 +95,41 @@ ${goto 160}${execi 25  sed -n '6p' ~/.wthr }
 ${goto 160}${execi 25  sed -n '7p' ~/.wthr }
 ${font}
 ${voffset -70}
-${font Inconsolata:size=8} 
-${goto 160}${execi 25 sed -n '9p' ~/.wthr | awk '{print substr($0,55,65)}' }
-${voffset -22}
-${goto 60}${execi 25 sed -n '10p' ~/.wthr | awk '{print substr($0,4,60)}' }
-${goto 60}${execi 25 sed -n '11p' ~/.wthr | awk '{print substr($0,4,60)}' }
-${goto 60}${execi 25 sed -n '12p' ~/.wthr | awk '{print substr($0,4,60)}' } 
-${goto 60}${execi 25 sed -n '13p' ~/.wthr | awk '{print substr($0,4,60)}' } 
-${goto 60}${execi 25 sed -n '14p' ~/.wthr | awk '{print substr($0,4,60)}' } 
-${goto 60}${execi 25 sed -n '15p' ~/.wthr | awk '{print substr($0,4,60)}' } 
-${goto 60}${execi 25 sed -n '16p' ~/.wthr | awk '{print substr($0,4,60)}' } 
-${goto 60}${execi 25 sed -n '17p' ~/.wthr | awk '{print substr($0,4,60)}' } 
+${font Inconsolata:size=9} 
+${voffset -32}
+${goto 20}${execi 25 sed -n '10p' ~/.wthr | awk '{print substr($0,4,60)}' }
+${goto 20}${execi 25 sed -n '11p' ~/.wthr | awk '{print substr($0,4,60)}' }
+${goto 20}${execi 25 sed -n '12p' ~/.wthr | awk '{print substr($0,4,60)}' } 
+${goto 20}${execi 25 sed -n '13p' ~/.wthr | awk '{print substr($0,4,60)}' } 
+${goto 20}${execi 25 sed -n '14p' ~/.wthr | awk '{print substr($0,4,60)}' } 
+${goto 20}${execi 25 sed -n '15p' ~/.wthr | awk '{print substr($0,4,60)}' } 
+${goto 20}${execi 25 sed -n '16p' ~/.wthr | awk '{print substr($0,4,60)}' } 
+${goto 20}${execi 25 sed -n '17p' ~/.wthr | awk '{print substr($0,4,60)}' } 
 
-${goto 60}${execi 25 sed -n '10p' ~/.wthr | awk '{print substr($0,66,130)}' }
-${goto 60}${execi 25 sed -n '11p' ~/.wthr | awk '{print substr($0,66,130)}' }
-${goto 60}${execi 25 sed -n '12p' ~/.wthr | awk '{print substr($0,66,130)}' }
-${goto 60}${execi 25 sed -n '13p' ~/.wthr | awk '{print substr($0,66,130)}' }
-${goto 60}${execi 25 sed -n '14p' ~/.wthr | awk '{print substr($0,66,130)}' }
-${goto 60}${execi 25 sed -n '15p' ~/.wthr | awk '{print substr($0,66,130)}' }
-${goto 60}${execi 25 sed -n '16p' ~/.wthr | awk '{print substr($0,66,130)}' }
-${goto 60}${execi 25 sed -n '17p' ~/.wthr | awk '{print substr($0,66,130)}' }
+${voffset -22}
+${goto 20}${execi 25 sed -n '10p' ~/.wthr | awk '{print substr($0,66,130)}' }
+${goto 20}${execi 25 sed -n '11p' ~/.wthr | awk '{print substr($0,66,130)}' }
+${goto 20}${execi 25 sed -n '12p' ~/.wthr | awk '{print substr($0,66,130)}' }
+${goto 20}${execi 25 sed -n '13p' ~/.wthr | awk '{print substr($0,66,130)}' }
+${goto 20}${execi 25 sed -n '14p' ~/.wthr | awk '{print substr($0,66,130)}' }
+${goto 20}${execi 25 sed -n '15p' ~/.wthr | awk '{print substr($0,66,130)}' }
+${goto 20}${execi 25 sed -n '16p' ~/.wthr | awk '{print substr($0,66,130)}' }
+${goto 20}${execi 25 sed -n '17p' ~/.wthr | awk '{print substr($0,66,130)}' }
 ${font}
-${voffset -415}
+${voffset -435}
 ${font size=15}
 ${goto 400}${voffset 3}Wifi ${alignr}${wireless_essid}${voffset -5}
- ${goto 400}${voffset 9} ${alignr}${wireless_bitrate wlp58s0} (${wireless_link_qual_perc wlp58s0}%)   ${color AEA79F}${wireless_link_bar 6,50 wlp58s0}${color DAD7D3}
+ ${goto 400}${voffset 9} ${alignr}${wireless_bitrate wlp58s0} (${wireless_link_qual_perc wlp58s0}%)   ${color 9FAEA7}${wireless_link_bar 6,50 wlp58s0}${color DAD7D3}
 ${goto 400}${voffset 15}Battery ${alignr}(${format_time $battery_time "\hh \mm"}, ${battery_percent}%) ${color grey}${battery_bar 6,50}${color DAD7D3}
 ${goto 400}${voffset 2}Uptime ${alignr}${format_time $uptime_short "\hh \mm"}
 ${font}
 
 ${voffset -50}${font Inconsolata:size=13}
- ${goto 400}Mem, Swp ${alignr}${memmax} ${color AEA79F}${membar 6,40}${color DAD7D3} ${swapmax} ${color AEA79F}${swapbar 6,40}${color DAD7D3}
- ${goto 400}File Sys ${alignr}${fs_free}/${fs_size} ${color AEA79F}${fs_bar 6,40}${color DAD7D3}
- ${goto 400}Mem Load ${alignr}${color AEA79F}${memgraph 18,145 666666 AAAAAA}${color DAD7D3}
- ${goto 400}CPU Load ${alignr}${color AEA79F}${cpugraph cpu0 18,105 666666 AAAAAA}${cpugraph cpu1 18,105 7E290D AAAAAA}${color DAD7D3}
- ${alignr}${color AEA79F}${cpugraph cpu2 18,105 666666 AAAAAA}${cpugraph cpu3 18,105 666666 AAAAAA}${color DAD7D3}
+ ${goto 400}Mem, Swp ${alignr}${memmax} ${color 9FAEA7}${membar 6,40}${color DAD7D3} ${swapmax} ${color 9FAEA7}${swapbar 6,40}${color DAD7D3}
+ ${goto 400}File Sys ${alignr}${fs_free}/${fs_size} ${color 9FAEA7}${fs_bar 6,40}${color DAD7D3}
+ ${goto 400}Mem Load ${alignr}${color 9FAEA7}${memgraph 18,145 666666 AAAAAA}${color DAD7D3}
+ ${goto 400}CPU Load ${alignr}${color 9FAEA7}${cpugraph cpu0 18,105 666666 AAAAAA}${cpugraph cpu1 18,105 7E290D AAAAAA}${color DAD7D3}
+ ${alignr}${color 9FAEA7}${cpugraph cpu2 18,105 666666 AAAAAA}${cpugraph cpu3 18,105 666666 AAAAAA}${color DAD7D3}
  ${goto 400}${voffset 5}${color grey}Down:$color ${downspeed wlp58s0}${alignr}${downspeedgraph wlp58s0 18,105 666666 AAAAAA}
  ${goto 400}${color grey}Up:  $color ${upspeed wlp58s0} ${alignr}${upspeedgraph wlp58s0 18,105 666666 AAAAAA}	
 ${font}
@@ -180,6 +180,6 @@ ${font}
 
 --Sytem Temp ${alignr}${acpitemp}°C
 -- ${goto 300}Ext. IP Addr. ${alignr}${exec curl -s www.icanhazip.com}${font}
--- ${goto 350}CPU Cores 1,2 ${alignr}${freq 1} MHz  ${color AEA79F}${cpubar cpu1 6,50}${color DAD7D3}  ${freq 2} MHz  ${color AEA79F}${cpubar cpu2 6,50}${color DAD7D3}
--- ${goto 350}CPU Cores 3,4 ${alignr}${freq 3} MHz  ${color AEA79F}${cpubar cpu3 6,50}${color DAD7D3}  ${freq 4} MHz  ${color AEA79F}${cpubar cpu4 6,50}${color DAD7D3}
--- ${goto 350}Mem Load ${alignr}${color AEA79F}${memgraph 18,145 7E290D DA4816}${color DAD7D3}
+-- ${goto 350}CPU Cores 1,2 ${alignr}${freq 1} MHz  ${color 9FAEA7}${cpubar cpu1 6,50}${color DAD7D3}  ${freq 2} MHz  ${color 9FAEA7}${cpubar cpu2 6,50}${color DAD7D3}
+-- ${goto 350}CPU Cores 3,4 ${alignr}${freq 3} MHz  ${color 9FAEA7}${cpubar cpu3 6,50}${color DAD7D3}  ${freq 4} MHz  ${color 9FAEA7}${cpubar cpu4 6,50}${color DAD7D3}
+-- ${goto 350}Mem Load ${alignr}${color 9FAEA7}${memgraph 18,145 7E290D DA4816}${color DAD7D3}
