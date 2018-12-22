@@ -1,6 +1,8 @@
 {-# LANGUAGE PackageImports, OverloadedStrings, FlexibleInstances, MultiParamTypeClasses #-} 
 import XMonad
 import XMonad.Config.Gnome
+import Data.Monoid      -- Needed to act on release key events
+import Control.Monad    -- Needed to act on release key events
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
@@ -115,6 +117,25 @@ instance Transformer HIDE Window where
     transform _ x k = k (EmptyLayout) (\(EmptyLayout) -> x)
 
 ---------------------------------
+--  Key release events
+--  https://stackoverflow.com/questions/6605399/how-can-i-set-an-action-to-occur-on-a-key-release-in-xmonad
+keyUpEventHook :: Event -> X All
+keyUpEventHook e = handle e >> return (All True)
+
+keyUpKeys (XConf{ config = XConfig {XMonad.modMask = modMask} }) = M.fromList $ 
+    [ ((modMask, xK_Alt_L), sendMessage ToggleStruts ) ]
+
+handle :: Event -> X ()
+handle (KeyEvent {ev_event_type = t, ev_state = m, ev_keycode = code})
+    | t == keyRelease = withDisplay $ \dpy -> do
+        s  <- io $ keycodeToKeysym dpy code 0
+        mClean <- cleanMask m
+        ks <- asks keyUpKeys
+        userCodeDef () $ whenJust (M.lookup (mClean, s) ks) id
+handle _ = return ()
+---------------------------------
+
+
 myLayout = fixFocus $ avoidStruts  -- Makes gnome panel visible
          $ windowNavigation 
          $ boringWindows 
@@ -204,7 +225,7 @@ myKeys =
     , ((myModMask .|. controlMask, xK_x), scratchChrm)
     , ((myModMask                , xK_r), scratchRemm)
     , ((myModMask                , xK_y), scratchSkype)
-    , ((myModMask                , xK_b), sendMessage ToggleStruts)
+    , ((noModMask                , xK_Alt_L), sendMessage ToggleStruts) -- $ SetStruts [minBound .. maxBound] [])
 --    , ((myModMask .|. shiftMask  , xK_x), scratchWmail)
 -- also gone: xK_b, xK_w, xK_e
   ]
@@ -315,7 +336,8 @@ main = do
            , focusedBorderColor = myFocusedBorderColor
            , normalBorderColor  = myNormalBorderColor
            , startupHook        = myStartupHook
-           , handleEventHook    = fullscreenEventHook -- For Firefox to stay in fullscreen
+           , handleEventHook    = handleEventHook defaultConfig `mappend`
+                     keyUpEventHook `mappend` fullscreenEventHook -- For Firefox to stay in fullscreen
            , manageHook         = myManageHook 
                                     <+> namedScratchpadManageHook myScratchPads 
                                     <+> manageHook defaultConfig -- uses default too
