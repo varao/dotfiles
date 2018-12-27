@@ -123,7 +123,7 @@ keyUpEventHook :: Event -> X All
 keyUpEventHook e = handle e >> return (All True)
 
 keyUpKeys (XConf{ config = XConfig {XMonad.modMask = modMask} }) = M.fromList $ 
-    [ ((modMask, xK_Alt_L), sendMessage ToggleStruts ) ]
+    [ ((modMask, xK_Alt_R), sendMessage ToggleStruts ) ]
 
 handle :: Event -> X ()
 handle (KeyEvent {ev_event_type = t, ev_state = m, ev_keycode = code})
@@ -225,7 +225,9 @@ myKeys =
     , ((myModMask .|. controlMask, xK_x), scratchChrm)
     , ((myModMask                , xK_r), scratchRemm)
     , ((myModMask                , xK_y), scratchSkype)
-    , ((noModMask                , xK_Alt_L), sendMessage ToggleStruts) -- $ SetStruts [minBound .. maxBound] [])
+-- Below toggles panel when Alt_R is held down. For a permanent 
+-- change, hit Alt_R+Shift, and release Alt_R first
+    , ((noModMask                , xK_Alt_R), sendMessage ToggleStruts) 
 --    , ((myModMask .|. shiftMask  , xK_x), scratchWmail)
 -- also gone: xK_b, xK_w, xK_e
   ]
@@ -295,9 +297,9 @@ myFzf = "$(/home/varao/git/dotfiles/search.sh )"
 -- Stolen from
 -- https://wiki.haskell.org/Xmonad/Config_archive/rtalreja's_xmonad.hs
 -- https://www.snip2code.com/Snippet/1092870/Xmonad-hs-works-with-lemonbar(-xft-slant/
-myLogHook h = dynamicLogWithPP $ defaultPP
+myLogHook h = dynamicLogWithPP . namedScratchpadFilterOutWorkspacePP $ defaultPP
     {
-        ppCurrent           =   wrap " %{F#ebac54}[" "]%{F#1B1D1E} " . pad 
+        ppCurrent           =   wrap " %{F#DDDDDD}[" "]%{F#1B1D1E} " . pad 
       , ppVisible           =   wrap "%{F#FFFFFF}" "%{F#1B1D1E}" . pad 
       , ppHidden            =   wrap "%{F#888888}" "%{F#1B1D1E}" . pad 
  --     , ppHiddenNoWindows   =   dzenColor "#7b7b7b" "#1B1D1E" . pad
@@ -318,8 +320,8 @@ myLogHook h = dynamicLogWithPP $ defaultPP
 
 --myXmonadBar = "dzen2 -x '300' -y '0' -h '24' -w '800' -ta 'l' -fg '#FFFFFF' -bg '#1B1D1E' -fn '-misc-fixed-medium-r-normal--15-140-75-75-c-90-koi8-r'"
 -- installed fork from https://github.com/krypt-n/bar for better font support
-myXmonadBar = "/home/varao/git/lemonbar/lemonbar -g 800x24+300+0 -F '#FFFFFF' -B '#1B1D1E' -f 'roboto'"
-myXmonadBar2 = "/home/varao/git/lemonbar/lemonbar -g x24+1920+0 -F '#FFFFFF' -B '#1B1D1E' -f 'roboto'"
+myXmonadBar = "/home/varao/git/lemonbar/lemonbar -g 800x24+300+0 -F '#FFFFFF' -B '#3F3B39' -f 'roboto'"
+myXmonadBar2 = "/home/varao/git/lemonbar/lemonbar -g x24+1920+0 -F '#FFFFFF' -B '#3F3B39' -f 'roboto'"
 myStatusBar = "conky -c /home/varao/git/dotfiles/.conkyrc -x 1000; conky -c /home/varao/git/dotfiles/.conkyrc -x 2900 " -- | dzen2 -x '1100' -w '40' -h '24' -ta 'r' -bg '#1B1D1E' -fg '#FFFFFF' -y '0'"
 
 main :: IO ()
