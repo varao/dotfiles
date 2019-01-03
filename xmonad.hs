@@ -123,7 +123,7 @@ keyUpEventHook :: Event -> X All
 keyUpEventHook e = handle e >> return (All True)
 
 keyUpKeys (XConf{ config = XConfig {XMonad.modMask = modMask} }) = M.fromList $ 
-    [ ((modMask, xK_Alt_R), sendMessage ToggleStruts ) ]
+    [ ((modMask, xK_Alt_R), sequence_ [sendMessage ToggleStruts, spawn "pkill compton; compton -cCGfF -b -I 0.1 -O 0.1 "] ) ]
 
 handle :: Event -> X ()
 handle (KeyEvent {ev_event_type = t, ev_state = m, ev_keycode = code})
@@ -161,7 +161,10 @@ myNormalBorderColor = "#222222"
 
 myStartupHook     = do
   startupHook gnomeConfig
-  spawn "xcompmgr -c -t-9 -l-11 -r1 -o.0 -D0 &" -- for transparencies (add -fF -o.05 for fade effects)
+ -- spawn "xcompmgr -c -t-9 -l-11 -r1 -fF -o.0 -D0 &" -- for transparencies (add -fF -o.05 for fade effects)
+ -- To change this, first pkill xcompmgr/compton
+  spawn "compton -cCGfF -b -I 0.1 -O 0.1 &"
+
  -- setWMName "HM"
  
 myManageHook = composeAll
@@ -222,12 +225,13 @@ myKeys =
 --    , ((myModMask .|. shiftMask  , xK_z), scratchZthr)
     , ((myModMask                , xK_x), scratchViv)
     , ((myModMask .|. shiftMask  , xK_x), scratchBrave)
-    , ((myModMask .|. controlMask, xK_x), scratchChrm)
+    , ((myModMask .|. controlMask, xK_x), scratchFfx)
     , ((myModMask                , xK_r), scratchRemm)
     , ((myModMask                , xK_y), scratchSkype)
 -- Below toggles panel when Alt_R is held down. For a permanent 
 -- change, hit Alt_R+Shift, and release Alt_R first
-    , ((noModMask                , xK_Alt_R), sendMessage ToggleStruts) 
+    , ((noModMask                , xK_Alt_R), 
+                  sequence_ [sendMessage ToggleStruts, spawn "pkill compton; compton -cCGfF -b -I 0.1 -O 0.1 -i .04 --active-opacity .04"] ) 
 --    , ((myModMask .|. shiftMask  , xK_x), scratchWmail)
 -- also gone: xK_b, xK_w, xK_e
   ]
@@ -249,7 +253,7 @@ myKeys =
 
 myScratchPads = [  NS "fuzzyfind"  myFzf  findFZ  (customFloating $ W.RationalRect (1/8) (1/6) (1/3) (2/3))  -- one scratchpad
                  , NS "brave-p"  "brave-browser --incognito" findBravep nonFloating  -- one scratchpad
---               , NS "firefox-p"  "firefox -private-window" findFfxp nonFloating  -- one scratchpad
+                 , NS "firefox-p"  "firefox -private-window" findFfxp nonFloating  -- one scratchpad
                  , NS "palemoon"  "palemoon" findPm nonFloating  -- one scratchpad
                  , NS "chromium"   "chromium-browser" findChrm nonFloating  -- one scratchpad
                  , NS "vivaldi"   "vivaldi-stable -incognito" findViv nonFloating  -- one scratchpad

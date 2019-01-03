@@ -86,7 +86,7 @@ conky.text = [[
 ${voffset 150}$hr
 ${voffset -10}${font Fira Sans :size=45}${time %R}${font}${voffset -5}
 ${voffset 2}${font Fira Sans Light:size=15} ${time %a }${time %b} ${time %e}${font}
-${voffset -160}
+${voffset -140}
 ${font Inconsolata:size=12}${color DAD7D3} 
 ${goto 160}${execi 25  sed -n '3p' ~/.wthr }
 ${goto 160}${execi 25  sed -n '4p' ~/.wthr }
@@ -95,49 +95,49 @@ ${goto 160}${execi 25  sed -n '6p' ~/.wthr }
 ${goto 160}${execi 25  sed -n '7p' ~/.wthr }
 ${font}
 ${voffset -70}
-${font Inconsolata:size=9} 
+${font Inconsolata:size=10} 
 ${voffset -32}
-${goto 20}${execi 25 sed -n '10p' ~/.wthr | awk '{print substr($0,4,60)}' }
-${goto 20}${execi 25 sed -n '11p' ~/.wthr | awk '{print substr($0,4,60)}' }
-${goto 20}${execi 25 sed -n '12p' ~/.wthr | awk '{print substr($0,4,60)}' } 
-${goto 20}${execi 25 sed -n '13p' ~/.wthr | awk '{print substr($0,4,60)}' } 
-${goto 20}${execi 25 sed -n '14p' ~/.wthr | awk '{print substr($0,4,60)}' } 
-${goto 20}${execi 25 sed -n '15p' ~/.wthr | awk '{print substr($0,4,60)}' } 
-${goto 20}${execi 25 sed -n '16p' ~/.wthr | awk '{print substr($0,4,60)}' } 
-${goto 20}${execi 25 sed -n '17p' ~/.wthr | awk '{print substr($0,4,60)}' } 
+${goto 00}${execi 25 sed -n '10p' ~/.wthr | awk '{print substr($0,4,60)}' }
+${goto 00}${execi 25 sed -n '11p' ~/.wthr | awk '{print substr($0,4,60)}' }
+${goto 00}${execi 25 sed -n '12p' ~/.wthr | awk '{print substr($0,4,60)}' } 
+${goto 00}${execi 25 sed -n '13p' ~/.wthr | awk '{print substr($0,4,60)}' } 
+${goto 00}${execi 25 sed -n '14p' ~/.wthr | awk '{print substr($0,4,60)}' } 
+${goto 00}${execi 25 sed -n '15p' ~/.wthr | awk '{print substr($0,4,60)}' } 
+${goto 00}${execi 25 sed -n '16p' ~/.wthr | awk '{print substr($0,4,60)}' } 
+${goto 00}${execi 25 sed -n '17p' ~/.wthr | awk '{print substr($0,4,60)}' } 
 
 ${voffset -22}
-${goto 20}${execi 25 sed -n '10p' ~/.wthr | awk '{print substr($0,66,130)}' }
-${goto 20}${execi 25 sed -n '11p' ~/.wthr | awk '{print substr($0,66,130)}' }
-${goto 20}${execi 25 sed -n '12p' ~/.wthr | awk '{print substr($0,66,130)}' }
-${goto 20}${execi 25 sed -n '13p' ~/.wthr | awk '{print substr($0,66,130)}' }
-${goto 20}${execi 25 sed -n '14p' ~/.wthr | awk '{print substr($0,66,130)}' }
-${goto 20}${execi 25 sed -n '15p' ~/.wthr | awk '{print substr($0,66,130)}' }
-${goto 20}${execi 25 sed -n '16p' ~/.wthr | awk '{print substr($0,66,130)}' }
-${goto 20}${execi 25 sed -n '17p' ~/.wthr | awk '{print substr($0,66,130)}' }
+${goto 00}${execi 25 sed -n '10p' ~/.wthr | awk '{print substr($0,66,130)}' }
+${goto 00}${execi 25 sed -n '11p' ~/.wthr | awk '{print substr($0,66,130)}' }
+${goto 00}${execi 25 sed -n '12p' ~/.wthr | awk '{print substr($0,66,130)}' }
+${goto 00}${execi 25 sed -n '13p' ~/.wthr | awk '{print substr($0,66,130)}' }
+${goto 00}${execi 25 sed -n '14p' ~/.wthr | awk '{print substr($0,66,130)}' }
+${goto 00}${execi 25 sed -n '15p' ~/.wthr | awk '{print substr($0,66,130)}' }
+${goto 00}${execi 25 sed -n '16p' ~/.wthr | awk '{print substr($0,66,130)}' }
+${goto 00}${execi 25 sed -n '17p' ~/.wthr | awk '{print substr($0,66,130)}' }
 ${font}
-${voffset -435}
+${voffset -480}
 ${font size=15}
-${goto 400}${color DAD7D3}${voffset 3}Wifi ${alignr}${wireless_essid}${voffset -5}
- ${goto 400}${voffset 9} ${alignr}${wireless_bitrate wlp58s0} (${wireless_link_qual_perc wlp58s0}%)   ${color 9FAEA7}${wireless_link_bar 6,50 wlp58s0}${color DAD7D3}
-${goto 400}${voffset 15}Battery ${alignr}(${format_time $battery_time "\hh \mm"}, ${battery_percent}%) ${color grey}${battery_bar 6,50}${color DAD7D3}
-${goto 400}${voffset 2}Uptime ${alignr}${format_time $uptime_short "\hh \mm"}
+${goto 430}${color DAD7D3}${voffset 3}Wifi ${alignr}${wireless_essid}${voffset -5}
+ ${goto 430}${voffset 9} ${alignr}${wireless_bitrate wlp58s0} (${wireless_link_qual_perc wlp58s0}%)   ${color 9FAEA7}${wireless_link_bar 6,50 wlp58s0}${color DAD7D3}
+${goto 430}${voffset 15}Battery ${alignr}(${format_time $battery_time "\hh \mm"}, ${battery_percent}%) ${color grey}${battery_bar 6,50}${color DAD7D3}
+${goto 430}${voffset 2}Uptime ${alignr}${format_time $uptime_short "\hh \mm"}
 ${font}
 
 ${voffset -50}${font Inconsolata:size=13}
- ${goto 400}Mem, Swp ${alignr}${memmax} ${color 9FAEA7}${membar 6,40}${color DAD7D3} ${swapmax} ${color 9FAEA7}${swapbar 6,40}${color DAD7D3}
- ${goto 400}File Sys ${alignr}${fs_free}/${fs_size} ${color 9FAEA7}${fs_bar 6,40}${color DAD7D3}
- ${goto 400}Mem Load ${alignr}${color 9FAEA7}${memgraph 18,145 666666 AAAAAA}${color DAD7D3}
- ${goto 400}CPU Load ${alignr}${color 9FAEA7}${cpugraph cpu0 18,105 666666 AAAAAA}${cpugraph cpu1 18,105 7E290D AAAAAA}${color DAD7D3}
+ ${goto 430}Mem, Swp ${alignr}${memmax} ${color 9FAEA7}${membar 6,40}${color DAD7D3} ${swapmax} ${color 9FAEA7}${swapbar 6,40}${color DAD7D3}
+ ${goto 430}File Sys ${alignr}${fs_free}/${fs_size} ${color 9FAEA7}${fs_bar 6,40}${color DAD7D3}
+ ${goto 430}Mem Load ${alignr}${color 9FAEA7}${memgraph 18,145 666666 AAAAAA}${color DAD7D3}
+ ${goto 430}CPU Load ${alignr}${color 9FAEA7}${cpugraph cpu0 18,105 666666 AAAAAA}${cpugraph cpu1 18,105 7E290D AAAAAA}${color DAD7D3}
  ${alignr}${color 9FAEA7}${cpugraph cpu2 18,105 666666 AAAAAA}${cpugraph cpu3 18,105 666666 AAAAAA}${color DAD7D3}
- ${goto 400}${voffset 5}${color DAD7D3}Down:$color ${downspeed wlp58s0}${alignr}${downspeedgraph wlp58s0 18,105 666666 AAAAAA}
- ${goto 400}${color DAD7D3}Up:  $color ${upspeed wlp58s0} ${alignr}${upspeedgraph wlp58s0 18,105 666666 AAAAAA}	
+ ${goto 430}${voffset 5}${color DAD7D3}Down:$color ${downspeed wlp58s0}${alignr}${downspeedgraph wlp58s0 18,105 666666 AAAAAA}
+ ${goto 430}${color DAD7D3}Up:  $color ${upspeed wlp58s0} ${alignr}${upspeedgraph wlp58s0 18,105 666666 AAAAAA}	
 ${font}
 
 
-${voffset -130}
+${voffset -90}
 $hr
-${voffset -50}
+${voffset -40}
 ${font Inconsolata:size=14}
 ${alignr}${execi 333 sed -n '1p' ~/Dropbox/DropsyncFiles/todo.txt }
 ${alignr}${execi 333 sed -n '2p' ~/Dropbox/DropsyncFiles/todo.txt }
@@ -151,7 +151,7 @@ ${alignr}${execi 333 sed -n '9p' ~/Dropbox/DropsyncFiles/todo.txt }
 ${alignr}${execi 333 sed -n '10p' ~/Dropbox/DropsyncFiles/todo.txt }
 ${font}
 
-${voffset -360}
+${voffset -350}
 ${font Inconsolata:size=14}
 ${execi 3 cat ~/.gcalcli | cut -c-45 }
 ${font}

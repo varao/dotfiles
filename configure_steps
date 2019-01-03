@@ -7,7 +7,8 @@ Install xmonad:
   6) Install lemonbar fork (https://github.com/krypt-n/bar) (the fork has better font support than lemonbar) and ignore xmonad-log-applet https://github.com/krypt-n/bar
   --6) Install xmonad-log-applet (one of the forks eg https://github.com/fabiodl/xmonad-log-applet)
   --        Here, first run ./autogen.sh --with-panel=gnomeflashback
-  7) Reboot
+  7) Install compton
+  8) Reboot
 
 install neovim
 install dircolors from git/dotfiles
@@ -25,3 +26,12 @@ For gestures, use libinput-gestures
 Add mystart.sh to gnome starting-applications
 
 In .fzf/shell/completion.bash, replace find with bfs
+
+To install R kernel for jupyter: 
+  install.packages(c('crayon', 'pbdZMQ', 'devtools'))
+  devtools::install_github(paste0('IRkernel/', c('repr', 'IRdisplay', 'IRkernel')))
+
+To install RISE:
+   First install reveal.js (https://github.com/hakimel/reveal.js/):
+      Install node.js and npm, then clone git.
+   Then install RISE via conda
