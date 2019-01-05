@@ -35,3 +35,7 @@ To install RISE:
    First install reveal.js (https://github.com/hakimel/reveal.js/):
       Install node.js and npm, then clone git.
    Then install RISE via conda
+
+
+To get all applet in gnome-panel, 
+just run "unity". Else see https://askubuntu.com/questions/1097737/gnome-panel-applet-indicator-applet-complete-is-missing-icons
