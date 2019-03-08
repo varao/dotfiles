@@ -1,6 +1,16 @@
 set fish_greeting ""
 set fish_color_search_match --background='444'
-fish_vi_key_bindings
+# fish_vi_key_bindings
+fish_default_key_bindings
+
+# The function fish_key_reader is useful
+#bind -M insert \t complete-and-search
+#bind -M insert -k btab complete 
+bind -k sr 'history-token-search-backward'
+bind -k sf 'history-token-search-forward'
+#bind \e\x7F 'backward-kill-path-component'
+bind -k ppage 'backward-word'
+bind -k npage 'forward-word'
 
 alias zathur='/home/varao/git/zathura-tabbed/zathura-tabbed 2> /dev/null'
 alias rm='rm -I'
@@ -28,14 +38,16 @@ set FZF_COMPLETE = 2
 
 # Vinayak: to get a shorter prompt
 function fish_prompt
- echo "~$PWD\$ " | sed "s#^~$HOME##g" | awk -F "/" '{
-  if (length($0) > 14) { 
-    if (NF>4 && length($(NF-1)) < 8) print "/.../" $(NF-1) "/" $NF;
-#    else if (NF>3) print "/.../" $NF;
-    else print "/.../" $NF; 
-    }
-  else print $0;
-  }'
+  #set -g fish_prompt_pwd_dir_length 2
+  printf "%s " (prompt_pwd) 
+#  echo "~$PWD\$ " | sed "s#^~$HOME##g" | awk -F "/" '{
+#   if (length($0) > 14) { 
+#     if (NF>4 && length($(NF-1)) < 8) print "/.../" $(NF-1) "/" $NF;
+# #    else if (NF>3) print "/.../" $NF;
+#     else print "/.../" $NF; 
+#     }
+#   else print $0;
+#   }'
 end
 function fish_right_prompt
   set_color $fish_color_autosuggestion 2> /dev/null; or set_color 555
@@ -47,6 +59,7 @@ function fish_mode_prompt
   # NOOP - Disable vim mode indicator
 end
 
+# First run omf install fasd
 function c
     set -l dir (fasd -Rd "$argv$1" | fzf -1 -0 --no-sort +m); and cd "$dir"; or return 1
 end
