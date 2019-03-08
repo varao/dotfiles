@@ -6,8 +6,11 @@
 ##[ -z "$TMUX"  ] && { tmux new-session;}  # This was: [ -z "$TMUX"  ] && { tmux attach || tmux new-session;}
 
 ##alias tma='tmux attach -d -t'
-alias zathur='zathura-tabbed 2> /dev/null'
+alias zathur='/home/varao/git/zathura-tabbed/zathura-tabbed 2> /dev/null'
 alias rm='rm -I'
+qp() { /home/varao/git/qpdfview/qpdfview-0.4.18beta1/qpdfview --unique "$@" &> /dev/null & }
+
+# also useful is rg instead of grep and fd instead of find
 
 #so as not to be disturbed by Ctrl-S ctrl-Q in terminals:
 stty -ixon
@@ -100,9 +103,11 @@ esac
 eval `dircolors /home/varao/.dir_colors/dircolors_vin`
 
 # some more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
+alias ll='ls -alFN'
+alias la='ls -AN'
+alias l='ls -CFN'
+alias pu='pushd'
+alias po='popd'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -132,6 +137,7 @@ set -o vi
 
 ev() (evince "$@" &>/dev/null )
 alias evince="ev"
+alias jl="jupyter-lab"
 
 # Rplugin
 
@@ -146,7 +152,7 @@ alias evince="ev"
        else
            export TERM=xterm-256color
        fi
-       alias vi='vim --servername VIM'
+       #alias vi='vim --servername VIM'
        # Add a -X option below to avoid delay opening a file because
        # vim tries to connect to X
        #alias vi='~/git/vim/src//vim --servername VIM'
@@ -188,17 +194,21 @@ export LANG=en_US.UTF-8
 
 export POWERLINE_CONFIG_COMMAND=powerline-config
 
-export PATH=$PATH:~/.cabal/bin:~/.xmonad/bin
+export PATH="$PATH:/home/varao/.cabal/bin" 
+export PATH="$PATH:/home/varao/.xmonad/bin" 
 
 export R_HISTFILE=~/.Rhistory
 
 # added by Anaconda3 installer
 export PATH="/home/varao/Python/anaconda3/bin:$PATH"
 
+export GOPATH=~/go
+
 if [ -n "${NVIM_LISTEN_ADDRESS+x}" ]; then
   alias n='nvr'
-  alias h='nvr -o'
-  alias v='nvr -O'
+  alias vi='nvr'
+  alias hs='nvr -o'
+  alias vs='nvr -O'
   alias t='nvr --remote-tab'
 fi
 
@@ -219,3 +229,35 @@ fi
 
 # If bash is executed after FZF, then this opens a file with nvim and 
 # exits bash after closing
+
+# fasd & fzf change directory - open best matched file using `fasd` if given argument, filter output of `fasd` using `fzf` else
+eval "$(fasd --init auto)"
+
+unalias z
+
+c() {
+    [ $# -gt 0 ] && fasd_cd -d "$*" && return
+    local dir
+    dir="$(fasd -Rdl "$1" | fzf -1 -0 --no-sort +m)" && cd "${dir}" || return 1
+  }
+alias cc='fasd_cd -id' # quick opening files with qpdfview
+
+v() {
+  local file
+  file="$(fasd -Rfl "$1" | fzf -1 -0 --no-sort +m)" && vi "${file}" || return 1
+}
+
+q() {
+  local file
+  file="$(fasd -Rfl "$1 .pdf$" | fzf -1 -0 --no-sort +m)" && qp "${file}" || return 1
+}
+
+z() {
+  local file
+  file="$(fasd -Rfl "$1 .pdf$" | fzf -1 -0 --no-sort +m)" && zathur "${file}" || return 1
+}
+
+#alias q='f -ed qpdf' # quick opening files with qpdfview
+_fasd_bash_hook_cmd_complete c v q z cc
+
+exec fish
