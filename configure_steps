@@ -30,6 +30,8 @@ In .fzf/shell/completion.bash, replace find with bfs
 To install R kernel for jupyter: 
 #  install.packages(c('crayon', 'pbdZMQ', 'devtools'))
 #  devtools::install_github(paste0('IRkernel/', c('repr', 'IRdisplay', 'IRkernel')))
+  
+ # (this is useful with pip3 and no anaconda: https://marcocarnini.github.io/software/2016/08/01/installing-r-kernel-for-jupyter.html)
 
 Actually, now I just need to do install.packages('IRdisplay')
 
