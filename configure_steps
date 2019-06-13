@@ -28,12 +28,15 @@ Add mystart.sh to gnome starting-applications
 In .fzf/shell/completion.bash, replace find with bfs
 
 To install R kernel for jupyter: 
-  install.packages(c('crayon', 'pbdZMQ', 'devtools'))
-  devtools::install_github(paste0('IRkernel/', c('repr', 'IRdisplay', 'IRkernel')))
+#  install.packages(c('crayon', 'pbdZMQ', 'devtools'))
+#  devtools::install_github(paste0('IRkernel/', c('repr', 'IRdisplay', 'IRkernel')))
+
+Actually, now I just need to do install.packages('IRdisplay')
 
 To install RISE:
    First install reveal.js (https://github.com/hakimel/reveal.js/):
       Install node.js and npm, then clone git.
+      (For arm64, I need to download the associated ,deb and run gdebi)
    Then install RISE via conda
 
 
