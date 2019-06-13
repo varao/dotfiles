@@ -1,11 +1,13 @@
 set nocompatible
 filetype off
+set shell=/usr/local/bin/fish
 
 call plug#begin('/home/varao/.local/share/nvim/plugged')
 
+  Plug 'dag/vim-fish'
   Plug 'lervag/vimtex'
   Plug 'flazz/vim-colorschemes'
-
+  
   Plug 'roxma/nvim-completion-manager'
   Plug 'jalvesaq/Nvim-R', { 'for' : 'r' }
   Plug 'bfredl/nvim-ipy'
@@ -16,9 +18,17 @@ call plug#begin('/home/varao/.local/share/nvim/plugged')
   Plug 'haya14busa/incsearch.vim'
   Plug 'haya14busa/incsearch-fuzzy.vim'
   "Plug 'vim-syntastic/syntastic'
-
+  
+  Plug 'skywind3000/asyncrun.vim'
+  "Plug 'plasticboy/vim-markdown'
+  "Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
+  Plug 'vim-pandoc/vim-pandoc'
+  Plug 'vim-pandoc/vim-pandoc-syntax'
+  Plug 'vim-pandoc/vim-rmarkdown'
+ " Plug '~/.local/share/nvim/plugged/vim-bookdown'
 
   Plug 'scrooloose/nerdtree'
+  Plug 'scrooloose/nerdcommenter'
   Plug 'tpope/vim-dispatch'
   let g:dispatch_quickfix_height=3
 
@@ -31,6 +41,7 @@ call plug#begin('/home/varao/.local/share/nvim/plugged')
   "Bundle 'junegunn/fzf.vim'
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
+  Plug 'lynnard/pandoc-preview.vim'
 call plug#end()
 
 set  hlsearch
@@ -42,7 +53,8 @@ set  laststatus=0
 set  wrap
 set  lbr
 set  breakindent 
-set  breakindentopt=shift:2
+set  breakindentopt=shift:1
+set  breakat+='~'
 "call matchadd('Error', '\(^\)\@<!\s\{2,\}')  " To highlight extra whitespaces vs 'blanks' displayed due to wrapping at words
 
 set  ruler
@@ -62,6 +74,7 @@ vmap <C-x> "+d
 
 nnoremap E ge
 vnoremap E ge
+nnoremap R <c-r>
 
 " Vim loads slowly trying to connct to X
 " To highlight, copy or paste, hold shift down
@@ -79,6 +92,11 @@ let mapleader = ","
 " nnoremap <C-Up> <C-w>k
 " nnoremap <C-Down> <C-w>j
 " nnoremap <C-=> <C-w>=
+
+nnoremap <C-h> <C-w>h
+nnoremap <C-l> <C-w>l
+nnoremap <C-k> <C-w>k
+nnoremap <C-j> <C-w>j
 
 nnoremap <leader>sh <C-w>h
 nnoremap <leader>sl <C-w>l
@@ -256,7 +274,7 @@ set incsearch
 " for Nvim-R
 let R_in_buffer = 0
 let R_applescript = 0
-let R_tmux_split = 0
+"let R_tmux_split = 0
 
 " Press the space bar to send lines and selection to R:
 vmap <Space> <Plug>RDSendSelection
@@ -353,7 +371,7 @@ hi Search ctermfg=Black ctermbg=DarkGrey
 hi Visual ctermbg=Black
 hi Error ctermfg=Red  ctermbg=Black gui=bold,underline
 hi ErrorMsg ctermfg=1  ctermbg=8 gui=bold,underline
-hi SpellBad ctermfg=Black  ctermbg=Red gui=bold,underline
+hi SpellBad ctermfg=Red  ctermbg=black gui=underline
 hi Folded ctermbg=DarkGrey
 hi Visual ctermbg=Black
 
@@ -373,7 +391,8 @@ let g:slime_default_config = {"socket_name": "default", "target_pane": "1"}
 hi VinArrow1 ctermfg=236 ctermbg=232
 hi VinArrow2 ctermfg=31 ctermbg=236
 
-set  rulerformat=%35(%=%#VinArrow1#\%#VinArrow2#\ %t\ %l,%c\ %2P%) "\ %{b:gitstat}%)
+"set  rulerformat=%35(%=%#VinArrow1#\%#VinArrow2#\ %t\ %l,%c\ %2P%) "\ %{b:gitstat}%)
+set  rulerformat=%35(%=%#VinArrow1#\%#VinArrow2#\ %t\ %l,%c\ %2P%) "\ %{b:gitstat}%)
 
 
 " This is the default extra key bindings
@@ -381,7 +400,8 @@ let g:fzf_action = {
    \ 'return': 'split',
    \ 'ctrl-t': 'tab split',
    \ 'ctrl-x': 'split',
-   \ 'ctrl-v': 'vsplit' }
+   \ 'ctrl-v': 'vsplit',
+   \ 'ctrl-z': 'silent !zathura_bg '}
 
 " Default fzf layout
 " - down / up / left / right
@@ -400,6 +420,7 @@ nnoremap <c-a> :FZF ~<cr>
 nnoremap <leader>n :FZF<cr>
 nnoremap <leader>~ :FZF ~<cr>
 " NERDTree
+" I have also added a custom file gx.vim
 let NERDTreeMapOpenSplit='s'
 let NERDTreeMapOpenVSplit='v'
 let NERDTreeMinimalUI = 1
@@ -409,6 +430,18 @@ nnoremap <leader>N :NERDTreeToggle<CR>
 " Close vim if only NERDTree
 " autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 """""""""""""""""""""""""""""""""""""""""""""""""
+let g:vim_markdown_folding_disabled = 1
+
+let g:mkdp_browser = 'firefox'
+let g:mkdp_refresh_slow=1
+"let g:pandoc#folding#fdc = 0
+hi! link FoldColumn Normal
+let g:pandoc#folding#level = 3
+"let g:pandoc#modules#disabled = ["folding", "spell"]
+let g:pandoc#syntax#conceal#use = 0
+
+let g:pandoc_preview_pdf_cmd = "zathura" 
+
 
 hi StatusLine  ctermfg=31 ctermbg=232 cterm=NONE
 hi StatusLineNC  ctermfg=4 ctermbg=236 cterm=NONE
@@ -428,7 +461,7 @@ let g:vimtex_complete_recursive_bib = 1
 nnoremap <localleader>lw :let g:vimtex_quickfix_open_on_warning = !g:vimtex_quickfix_open_on_warning<CR>
 
 " Navigate quickfix
-map <C-j> :cn<CR>
+map <C-q> :cn<CR>
 au FileType qf call AdjustWindowHeight(3, 10)
 function! AdjustWindowHeight(minheight, maxheight)
   exe max([min([line("$"), a:maxheight]), a:minheight]) . "wincmd _"
@@ -460,6 +493,49 @@ nmap <Tab> <Plug>SneakNext
 nmap <Backspace> <Plug>SneakPrevious
 "
 """"""""""""""""""""""""""""""""""""""""""""
+" Markdown
+"map <localleader>m :call mkdp#util#open_preview_page()<CR><CR>
+"map <localleader>m :PandocPreview <CR>
+"map <localleader>m :RMarkdown pdf<CR>
+map <localleader>m :call ToggleRMarkdown()<CR> 
+let s:Rmd_on = 0
+function! ToggleRMarkdown()
+    if s:Rmd_on
+      let s:Rmd_on = 0
+      augroup RMarkdown_auto
+        autocmd!
+      augroup END
+    else
+      let s:Rmd_on = 1
+      augroup RMarkdown_auto
+        RMarkdown pdf
+        autocmd!
+        autocmd BufWritePost <buffer> :silent! RMarkdown pdf
+      augroup END
+    endif
+endfunction
+
+let g:asyncrun_exit = "if g:asyncrun_status == 'failure' | call asyncrun#quickfix_toggle(8, 1) | else | echo 'complete' | end"
+
+map <localleader>M :silent! call ToggleBookdown()<CR> 
+let s:Bmd_on = 0
+function! ToggleBookdown()
+    if s:Bmd_on
+      let s:Bmd_on = 0
+      augroup Bookdown_auto
+        autocmd!
+      augroup END
+    else
+      let s:Bmd_on = 1
+      augroup Bookdown_auto
+        " Bookdown pdf
+       AsyncRun Rscript -e 'bookdown::preview_chapter("%:p", "bookdown::pdf_book")' 
+        autocmd!
+       autocmd BufWritePost <buffer> :AsyncRun Rscript -e 'bookdown::preview_chapter("%:p", "bookdown::pdf_book")' 
+"        autocmd BufWritePost <buffer> :silent! Bookdown pdf
+      augroup END
+    endif
+  endfunction
 
 " Vinayak (Rhistory)
 inoremap <expr> <c-k> fzf#complete({
