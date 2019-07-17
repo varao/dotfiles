@@ -2,7 +2,7 @@ set nocompatible
 filetype off
 set shell=/usr/local/bin/fish
 
-call plug#begin('/home/varao/.local/share/nvim/plugged')
+call plug#begin('$HOME/.local/share/nvim/plugged')
 
   Plug 'dag/vim-fish'
   Plug 'lervag/vimtex'
@@ -508,9 +508,10 @@ function! ToggleRMarkdown()
     else
       let s:Rmd_on = 1
       augroup RMarkdown_auto
-        RMarkdown pdf
+        " RMarkdown pdf
         autocmd!
-        autocmd BufWritePost <buffer> :silent! RMarkdown pdf
+        autocmd BufWritePost <buffer> :AsyncRun Rscript -e 'library(rmarkdown); render("%:p", "pdf_document")'
+        "autocmd BufWritePost <buffer> :silent! RMarkdown pdf
       augroup END
     endif
 endfunction
