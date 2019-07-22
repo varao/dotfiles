@@ -260,4 +260,6 @@ z() {
 #alias q='f -ed qpdf' # quick opening files with qpdfview
 _fasd_bash_hook_cmd_complete c v q z cc
 
-exec fish
+if [ -x "$(command -v fish)" ]; then
+   exec fish
+fi
