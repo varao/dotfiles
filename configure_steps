@@ -37,6 +37,11 @@ Actually, now I just need to do
 install.packages('IRdisplay')
 install.packages('IRkernel')
 
+On Android termux, to install the R kernel on Jupyter I need the Junyper package:
+  install.packages("JuniperKernel")
+  library(JuniperKernel)
+  installJuniper(useJupyterDefault = TRUE) # install into default Jupyter kernel location
+
 To install RISE:
    First install reveal.js (https://github.com/hakimel/reveal.js/):
       Install node.js and npm, then clone git.
