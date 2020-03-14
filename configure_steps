@@ -33,7 +33,14 @@ To install R kernel for jupyter:
   
  # (this is useful with pip3 and no anaconda: https://marcocarnini.github.io/software/2016/08/01/installing-r-kernel-for-jupyter.html)
 
-Actually, now I just need to do install.packages('IRdisplay')
+Actually, now I just need to do 
+install.packages('IRdisplay')
+install.packages('IRkernel')
+
+On Android termux, to install the R kernel on Jupyter I need the Junyper package:
+  install.packages("JuniperKernel")
+  library(JuniperKernel)
+  installJuniper(useJupyterDefault = TRUE) # install into default Jupyter kernel location
 
 To install RISE:
    First install reveal.js (https://github.com/hakimel/reveal.js/):
@@ -44,3 +51,15 @@ To install RISE:
 
 To get all applet in gnome-panel, 
 just run "unity". Else see https://askubuntu.com/questions/1097737/gnome-panel-applet-indicator-applet-complete-is-missing-icons
+
+
+#######################
+Program list:
+fish , neovim (with python support), fasd and conky.
+sudo apt-get install libxcb-randr0-dev libxcb-xtest0-dev libxcb-xinerama0-dev libxcb-shape0-dev libxcb-xkb-dev
+compton, zathura, dropbox, xdotool 
+
+firafont: https://stevescott.ca/2016-10-20-installing-the-fira-font-in-ubuntu.html).
+sudo apt-get install fonts-inconsolata
+pandoc-citeproc, qpdfview, jupyter, node.js npm, RISE
+
