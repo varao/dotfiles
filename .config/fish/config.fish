@@ -1,7 +1,7 @@
 set fish_greeting ""
 set fish_color_search_match --background='444'
-# fish_vi_key_bindings
-fish_default_key_bindings
+fish_vi_key_bindings
+#fish_default_key_bindings
 
 # The function fish_key_reader is useful
 #bind -M insert \t complete-and-search
@@ -16,6 +16,9 @@ alias zathur='/home/varao/git/zathura-tabbed/zathura-tabbed 2> /dev/null'
 alias rm='rm -I'
 function qp 
   qpdfview --unique $argv ^ /dev/null &
+end
+function zathura_bg 
+  zathura "$argv" & 
 end
 
 # some more ls aliases

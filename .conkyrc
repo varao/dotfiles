@@ -46,17 +46,15 @@ gap_x = 750,
 gap_y = 5,
 minimum_width = 200, minimum_height = 200,
 maximum_width = 1400,
+
 own_window = true,
-own_window_type = 'dock',
-
-own_window_argb_visual = true,
+own_window_type = 'desktop',
 own_window_transparent = true,
-
-own_window_transparent = true,
-own_window_argb_visual = true,
-
-own_window_class = 'conky-semi',
+own_window_class = 'Conky',
 own_window_hints = 'undecorated,sticky,skip_taskbar,skip_pager,below',
+
+own_window_argb_visual = true,
+
 border_inner_margin = 0,
 border_outer_margin = 0,
 

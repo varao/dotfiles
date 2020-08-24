@@ -12,6 +12,7 @@ import XMonad.Actions.GridSelect
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Spiral
 import XMonad.Layout.Tabbed
+import XMonad.Layout.StateFull (focusTracking)
 import XMonad.Layout.NoBorders (smartBorders)
 import XMonad.Layout.Spacing (smartSpacing)
 import XMonad.Layout.Simplest
@@ -123,7 +124,8 @@ keyUpEventHook :: Event -> X All
 keyUpEventHook e = handle e >> return (All True)
 
 keyUpKeys (XConf{ config = XConfig {XMonad.modMask = modMask} }) = M.fromList $ 
-    [ ((modMask, xK_Alt_R), sequence_ [sendMessage ToggleStruts, spawn "pkill compton; compton -cCGfF -b -I 0.1 -O 0.1 "] ) ]
+    [ ((modMask, xK_Alt_R), sendMessage ToggleStruts) ]
+--  [ ((modMask, xK_Alt_R), sequence_ [sendMessage ToggleStruts, spawn "pkill compton; compton -cCGfF -o 0 -b -I 0.1 -O 0.1 "] ) ]
 
 handle :: Event -> X ()
 handle (KeyEvent {ev_event_type = t, ev_state = m, ev_keycode = code})
@@ -140,7 +142,7 @@ myLayout = fixFocus $ avoidStruts  -- Makes gnome panel visible
          $ windowNavigation 
          $ boringWindows 
          $ mkToggle (single HIDE)  -- Shows desktop
-         $ my_full ||| my_tall 
+         $ my_full ||| (focusTracking my_tall)
               where 
               -- Full can have tabs but no top bar
                 my_full = addTabs shrinkText myTheme $ Full
@@ -163,7 +165,7 @@ myStartupHook     = do
   startupHook gnomeConfig
  -- spawn "xcompmgr -c -t-9 -l-11 -r1 -fF -o.0 -D0 &" -- for transparencies (add -fF -o.05 for fade effects)
  -- To change this, first pkill xcompmgr/compton
-  spawn "compton -cCGfF -b -I 0.1 -O 0.1 &"
+  spawn "compton -CG -o 0 -b -I 0.1 -O 0.1 -D 0 &"
 
  -- setWMName "HM"
  
@@ -181,14 +183,20 @@ myGSConfig = defaultGSConfig
     { gs_cellheight = 100
     , gs_cellwidth = 200
     , gs_cellpadding = 10
-    , gs_font = "xft:DejaVu Sans:size=10" 
+    , gs_font = "xft:DejaVu Sans:size=12" 
     }
 
 myModMask = mod1Mask
 
+-- Could not figure how to force full-screen in gnome
+--myTerminal = "/usr/bin/gnome-terminal --full-screen"
+myTerminal = "/home/varao/.local/kitty.app/bin/kitty"
+
+
 myKeys = 
-  [ --((myModMask, xK_p), spawn myLauncher)
-    ((myModMask .|. controlMask, xK_Left), sendMessage $ pullGroup L)
+  [ ((myModMask .|. shiftMask, xK_Return), spawn myTerminal) 
+    --((myModMask, xK_p), spawn myLauncher)
+    , ((myModMask .|. controlMask, xK_Left), sendMessage $ pullGroup L)
     --Group to Right
     , ((myModMask .|. controlMask, xK_Right), sendMessage $ pullGroup R)
     --Group Above
@@ -210,6 +218,7 @@ myKeys =
     , ((myModMask .|. controlMask, xK_space),  toSubl NextLayout)
     --Show desktop
     , ((myModMask,               xK_d), sendMessage $ Toggle HIDE)
+    , ((myModMask,               xK_slash),  sendMessage $ Toggle HIDE)
     --Grid of open windows
     , ((myModMask, xK_g), goToSelected myGSConfig)
     --BoringWindows: groups clustered windows
@@ -224,14 +233,15 @@ myKeys =
     , ((myModMask .|. shiftMask  , xK_z), scratchZthr)
 --    , ((myModMask .|. shiftMask  , xK_z), scratchZthr)
     , ((myModMask                , xK_x), scratchViv)
-    , ((myModMask .|. shiftMask  , xK_x), scratchBrave)
-    , ((myModMask .|. controlMask, xK_x), scratchFfx)
+    , ((myModMask .|. shiftMask  , xK_x), scratchFfxp)
+    , ((myModMask .|. controlMask, xK_x), scratchBrave)
     , ((myModMask                , xK_r), scratchRemm)
     , ((myModMask                , xK_y), scratchSkype)
+    , ((myModMask .|. shiftMask  , xK_s), scratchSlack)
 -- Below toggles panel when Alt_R is held down. For a permanent 
 -- change, hit Alt_R+Shift, and release Alt_R first
-    , ((noModMask                , xK_Alt_R), 
-                  sequence_ [sendMessage ToggleStruts, spawn "pkill compton; compton -cCGfF -b -I 0.1 -O 0.1 -i .04 --active-opacity .04"] ) 
+    , ((noModMask                , xK_Alt_R), sendMessage ToggleStruts) 
+               --   sequence_ [sendMessage ToggleStruts, spawn "pkill compton; compton -cCGfF -o 0 -b -I 0.1 -O 0.1 -i .01 --active-opacity .01"] ) 
 --    , ((myModMask .|. shiftMask  , xK_x), scratchWmail)
 -- also gone: xK_b, xK_w, xK_e
   ]
@@ -249,6 +259,7 @@ myKeys =
     scratchChrm  = namedScratchpadAction myScratchPads "chromium"
     scratchRemm  = namedScratchpadAction myScratchPads "remmina"
     scratchSkype = namedScratchpadAction myScratchPads "skype"
+    scratchSlack = namedScratchpadAction myScratchPads "slack"
 --    scratchWmail  = namedScratchpadAction myScratchPads "wmail"
 
 myScratchPads = [  NS "fuzzyfind"  myFzf  findFZ  (customFloating $ W.RationalRect (1/8) (1/6) (1/3) (2/3))  -- one scratchpad
@@ -263,6 +274,7 @@ myScratchPads = [  NS "fuzzyfind"  myFzf  findFZ  (customFloating $ W.RationalRe
                  , NS "pdfviewer"    "qpdfview --unique" findPdf nonFloating  -- one scratchpad
                  , NS "remmina"    "remmina" findRemm nonFloating  -- one scratchpad
                  , NS "skype"    "skypeforlinux" findSkype nonFloating -- one scratchpad
+                 , NS "slack"    "slack" findSlack nonFloating -- one scratchpad
                 ]
   where
    findFZ     = resource  =? "fzf_term"  
@@ -276,6 +288,7 @@ myScratchPads = [  NS "fuzzyfind"  myFzf  findFZ  (customFloating $ W.RationalRe
    findViv    = className =? "Vivaldi-stable"
    findRemm   = className =? "Remmina"  
    findSkype  = className =? "Skype"  
+   findSlack  = className =? "Slack"  
 --   findWmail = className =? "wmail"  
 
 myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
@@ -312,8 +325,8 @@ myLogHook h = dynamicLogWithPP . namedScratchpadFilterOutWorkspacePP $ defaultPP
       , ppSep               =   " " -- " |  "
       , ppLayout            =  wrap "%{F#ebac54}" "%{F#1B1D1E}" . 
                                 (\x -> case x of
-                                    "NoFrillsDeco Tabbed ResizableTall"             ->      "[ + ]"
-                                    "NoFrillsDeco Tabbed Mirror ResizableTall"      ->      "[ - ]"
+                                    "FocusTracking (NoFrillsDeco Tabbed ResizableTall)"             ->      "[ + ]"
+                                    "FocusTracking (NoFrillsDeco Tabbed Mirror ResizableTall)"      ->      "[ - ]"
                                     "Tabbed Full"      ->      "[ F ]"
                                     "Simple Float"              ->      "~"
                                     _                           ->      x
@@ -324,8 +337,8 @@ myLogHook h = dynamicLogWithPP . namedScratchpadFilterOutWorkspacePP $ defaultPP
 
 --myXmonadBar = "dzen2 -x '300' -y '0' -h '24' -w '800' -ta 'l' -fg '#FFFFFF' -bg '#1B1D1E' -fn '-misc-fixed-medium-r-normal--15-140-75-75-c-90-koi8-r'"
 -- installed fork from https://github.com/krypt-n/bar for better font support
-myXmonadBar = "/home/varao/git/lemonbar/lemonbar -g 800x24+300+0 -F '#FFFFFF' -B '#3F3B39' -f 'roboto'"
-myXmonadBar2 = "/home/varao/git/lemonbar/lemonbar -g x24+1920+0 -F '#FFFFFF' -B '#3F3B39' -f 'roboto'"
+myXmonadBar = "/home/varao/git/lemonbar/lemonbar -g 800x24+300+0 -F '#FFFFFF' -B '#3E3E3E' -f 'roboto'"
+myXmonadBar2 = "/home/varao/git/lemonbar/lemonbar -g x24+1920+0 -F '#FFFFFF' -B '#3E3E3E' -f 'roboto'"
 myStatusBar = "conky -c /home/varao/git/dotfiles/.conkyrc -x 1000; conky -c /home/varao/git/dotfiles/.conkyrc -x 2900 " -- | dzen2 -x '1100' -w '40' -h '24' -ta 'r' -bg '#1B1D1E' -fg '#FFFFFF' -y '0'"
 
 main :: IO ()
