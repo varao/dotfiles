@@ -6,11 +6,15 @@
 ##[ -z "$TMUX"  ] && { tmux new-session;}  # This was: [ -z "$TMUX"  ] && { tmux attach || tmux new-session;}
 
 ##alias tma='tmux attach -d -t'
-alias zathur='/home/varao/git/zathura-tabbed/zathura-tabbed 2> /dev/null'
+alias zathur='$HOME/git/zathura-tabbed/zathura-tabbed 2> /dev/null'
 alias rm='rm -I'
-qp() { /home/varao/git/qpdfview/qpdfview-0.4.18beta1/qpdfview --unique "$@" &> /dev/null & }
+alias ..='cd ..'
+#alias gits='git status -uno'
+qp() { $HOME/git/qpdfview/qpdfview-0.4.18beta1/qpdfview --unique "$@" &> /dev/null & }
+
 
 # also useful is rg instead of grep and fd instead of find
+# tree is nice too
 
 #so as not to be disturbed by Ctrl-S ctrl-Q in terminals:
 stty -ixon
@@ -100,7 +104,7 @@ esac
         alias egrep='egrep --color=auto'
     fi
 
-eval `dircolors /home/varao/.dir_colors/dircolors_vin`
+eval `dircolors $HOME/.dir_colors/dircolors_vin`
 
 # some more ls aliases
 alias ll='ls -alFN'
@@ -173,7 +177,7 @@ alias jl="jupyter-lab"
        fi
    fi
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-export FZF_COMPLETION_TRIGGER="''"
+export FZF_COMPLETION_TRIGGER="''"  # ctrl-T works instead
 export FZF_TMUX=1
 # Needed for fzf in nvim terminal
 [ -n "$NVIM_LISTEN_ADDRESS" ] && export FZF_DEFAULT_OPTS='--no-height'
@@ -194,13 +198,11 @@ export LANG=en_US.UTF-8
 
 export POWERLINE_CONFIG_COMMAND=powerline-config
 
-export PATH="$PATH:/home/varao/.cabal/bin" 
-export PATH="$PATH:/home/varao/.xmonad/bin" 
+export PATH="$PATH:$HOME/.cabal/bin" 
+export PATH="$PATH:$HOME/.xmonad/bin" 
+export PATH="$PATH:$HOME/.local/kitty.app/bin" 
 
 export R_HISTFILE=~/.Rhistory
-
-# added by Anaconda3 installer
-export PATH="/home/varao/Python/anaconda3/bin:$PATH"
 
 export GOPATH=~/go
 
@@ -260,6 +262,19 @@ z() {
 #alias q='f -ed qpdf' # quick opening files with qpdfview
 _fasd_bash_hook_cmd_complete c v q z cc
 
-if [ -x "$(command -v fish)" ]; then
-   exec fish
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('$HOME/Python/miniconda/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "$HOME/Python/miniconda/etc/profile.d/conda.sh" ]; then
+        . "$HOME/Python/miniconda/etc/profile.d/conda.sh"
+    else
+        export PATH="$HOME/Python/miniconda/bin:$PATH"
+    fi
 fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+exec fish
