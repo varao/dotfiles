@@ -1,7 +1,7 @@
 set fish_greeting ""
 set fish_color_search_match --background='444'
-fish_vi_key_bindings
-#fish_default_key_bindings
+#fish_vi_key_bindings
+fish_default_key_bindings
 
 # The function fish_key_reader is useful
 #bind -M insert \t complete-and-search
@@ -12,8 +12,12 @@ bind -k sf 'history-token-search-forward'
 bind -k ppage 'backward-word'
 bind -k npage 'forward-word'
 
-alias zathur='/home/varao/git/zathura-tabbed/zathura-tabbed 2> /dev/null'
+alias zathur='nohup /home/varao/git/zathura-tabbed/zathura-tabbed 2> /dev/null'
 alias rm='rm -I'
+alias rm='echo "This is not the command you are looking for."; false'
+alias trm='trash-put'
+alias trash-empty='trash-empty 7'
+
 function qp 
   qpdfview --unique $argv ^ /dev/null &
 end
@@ -29,9 +33,12 @@ alias pu='pushd'
 alias po='popd'
 # also useful is rg instead of grep and fd instead of find
 
-alias ev="evince"
+alias ev="nohup evince"
 alias jl="jupyter-lab"
 alias vi="nvim"
+alias kdiff="kitty +kitten diff"
+alias kdisp="kitty +kitten icat"
+
 
 #so as not to be disturbed by Ctrl-S ctrl-Q in terminals:
 stty -ixon
